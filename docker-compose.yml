@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  project-api:
+    build:
+      context: .
+      dockerfile: project-api/Dockerfile
+    ports:
+      - "8082:8082"
+    environment:
+      - PORT=8082
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3

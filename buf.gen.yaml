@@ -1,0 +1,15 @@
+version: v2
+managed:
+  enabled: true
+  override:
+    - file_option: go_package_prefix
+      value: github.com/kakke18/platform-security-poc2/project-api/pkg/gen
+plugins:
+  - remote: buf.build/protocolbuffers/go
+    out: project-api/pkg/gen
+    opt:
+      - paths=source_relative
+  - remote: buf.build/connectrpc/go
+    out: project-api/pkg/gen
+    opt:
+      - paths=source_relative

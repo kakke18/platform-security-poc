@@ -1,0 +1,134 @@
+syntax = "proto3";
+
+package project.v1;
+
+option go_package = "github.com/kakke18/platform-security-poc2/gen/project/v1;projectv1";
+
+import "google/protobuf/timestamp.proto";
+
+// ProjectService は、プロジェクト管理を担当するサービス
+service ProjectService {
+  // プロジェクトを作成
+  rpc CreateProject(CreateProjectRequest) returns (CreateProjectResponse) {}
+
+  // プロジェクトを取得
+  rpc GetProject(GetProjectRequest) returns (GetProjectResponse) {}
+
+  // プロジェクト一覧を取得
+  rpc ListProjects(ListProjectsRequest) returns (ListProjectsResponse) {}
+
+  // プロジェクトを更新
+  rpc UpdateProject(UpdateProjectRequest) returns (UpdateProjectResponse) {}
+
+  // プロジェクトを削除
+  rpc DeleteProject(DeleteProjectRequest) returns (DeleteProjectResponse) {}
+
+  // プロジェクトメンバーを追加
+  rpc AddMember(AddMemberRequest) returns (AddMemberResponse) {}
+
+  // プロジェクトメンバーを削除
+  rpc RemoveMember(RemoveMemberRequest) returns (RemoveMemberResponse) {}
+
+  // プロジェクトメンバー一覧を取得
+  rpc ListMembers(ListMembersRequest) returns (ListMembersResponse) {}
+}
+
+// Project はプロジェクト情報
+message Project {
+  string id = 1;
+  string workspace_id = 2;
+  string name = 3;
+  string description = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
+}
+
+// ProjectMember はプロジェクトメンバー情報
+message ProjectMember {
+  string project_id = 1;
+  string user_id = 2;
+  string role = 3; // owner, admin, member
+  google.protobuf.Timestamp joined_at = 4;
+}
+
+// CreateProject
+message CreateProjectRequest {
+  string workspace_id = 1;
+  string name = 2;
+  string description = 3;
+}
+
+message CreateProjectResponse {
+  Project project = 1;
+}
+
+// GetProject
+message GetProjectRequest {
+  string id = 1;
+}
+
+message GetProjectResponse {
+  Project project = 1;
+}
+
+// ListProjects
+message ListProjectsRequest {
+  string workspace_id = 1;
+  int32 page_size = 2;
+  string page_token = 3;
+}
+
+message ListProjectsResponse {
+  repeated Project projects = 1;
+  string next_page_token = 2;
+}
+
+// UpdateProject
+message UpdateProjectRequest {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+}
+
+message UpdateProjectResponse {
+  Project project = 1;
+}
+
+// DeleteProject
+message DeleteProjectRequest {
+  string id = 1;
+}
+
+message DeleteProjectResponse {
+  bool success = 1;
+}
+
+// AddMember
+message AddMemberRequest {
+  string project_id = 1;
+  string user_id = 2;
+  string role = 3;
+}
+
+message AddMemberResponse {
+  ProjectMember member = 1;
+}
+
+// RemoveMember
+message RemoveMemberRequest {
+  string project_id = 1;
+  string user_id = 2;
+}
+
+message RemoveMemberResponse {
+  bool success = 1;
+}
+
+// ListMembers
+message ListMembersRequest {
+  string project_id = 1;
+}
+
+message ListMembersResponse {
+  repeated ProjectMember members = 1;
+}

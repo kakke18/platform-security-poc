@@ -1,3 +1,21 @@
 # Claude Code
 .claude/settings.local.json
 **/.claude/local/**
+
+# Generated files
+*.pb.go
+*connect.go
+project-api/pkg/gen/
+
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+go.work
+
+# Dependencies
+vendor/
