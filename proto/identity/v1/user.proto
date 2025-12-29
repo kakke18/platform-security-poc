@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package identity.v1;
+
+option go_package = "identity/v1;identityv1";
+
+// UserService handles user management operations
+// Requires JWT authentication via Authorization header
+service UserService {
+  // GetMe returns the current user's information from JWT
+  rpc GetMe(GetMeRequest) returns (GetMeResponse) {}
+
+  // UpdateMe updates the current user's profile
+  rpc UpdateMe(UpdateMeRequest) returns (UpdateMeResponse) {}
+}
+
+// GetMeRequest is empty as user info comes from JWT
+message GetMeRequest {}
+
+// GetMeResponse returns the current user's information
+message GetMeResponse {
+  // User ID (Auth0 sub claim)
+  string user_id = 1;
+
+  // Email address
+  string email = 2;
+
+  // Display name
+  string name = 3;
+}
+
+// UpdateMeRequest contains fields to update
+message UpdateMeRequest {
+  // Display name (optional)
+  optional string name = 1;
+}
+
+// UpdateMeResponse returns the updated user information
+message UpdateMeResponse {
+  // User ID
+  string user_id = 1;
+
+  // Email address
+  string email = 2;
+
+  // Display name
+  string name = 3;
+}

@@ -1,0 +1,35 @@
+# Auth0設定
+# Auth0 Management APIの認証情報が必要です
+# https://manage.auth0.com/dashboard → Applications → Applications → "Auth0 Management API" → Machine to Machine Applications
+
+auth0_domain                    = "your-tenant.auth0.com"
+auth0_management_client_id      = "your_management_client_id"
+auth0_management_client_secret  = "your_management_client_secret"
+
+# API識別子（audience）
+api_identifier = "https://api.platform-security.local"
+
+# 環境別のURL設定
+# 開発環境
+callback_urls = [
+  "http://localhost:3000/auth/callback"
+]
+
+logout_urls = [
+  "http://localhost:3000"
+]
+
+web_origins = [
+  "http://localhost:3000"
+]
+
+# 本番環境の場合は以下のように変更
+# callback_urls = [
+#   "https://your-app.com/api/auth/callback"
+# ]
+# logout_urls = [
+#   "https://your-app.com"
+# ]
+# web_origins = [
+#   "https://your-app.com"
+# ]

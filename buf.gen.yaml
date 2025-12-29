@@ -1,0 +1,35 @@
+version: v2
+inputs:
+  - directory: proto
+plugins:
+  # Gateway service
+  - remote: buf.build/protocolbuffers/go
+    out: gateway/gen
+    opt:
+      - paths=source_relative
+      - Midentity/v1/user.proto=github.com/kakke18/platform-security-poc/gateway/gen/identity/v1
+  - remote: buf.build/connectrpc/go
+    out: gateway/gen
+    opt:
+      - paths=source_relative
+      - Midentity/v1/user.proto=github.com/kakke18/platform-security-poc/gateway/gen/identity/v1
+  # Identity service
+  - remote: buf.build/protocolbuffers/go
+    out: identity/gen
+    opt:
+      - paths=source_relative
+      - Midentity/v1/user.proto=github.com/kakke18/platform-security-poc/identity/gen/identity/v1
+  - remote: buf.build/connectrpc/go
+    out: identity/gen
+    opt:
+      - paths=source_relative
+      - Midentity/v1/user.proto=github.com/kakke18/platform-security-poc/identity/gen/identity/v1
+  # Frontend TypeScript
+  - remote: buf.build/bufbuild/es
+    out: frontend/src/api/generated
+    opt:
+      - target=ts
+  - remote: buf.build/connectrpc/es
+    out: frontend/src/api/generated
+    opt:
+      - target=ts
