@@ -1,3 +1,9 @@
 # Claude Code
 .claude/settings.local.json
 **/.claude/local/**
+
+.env
+
+# Generated files
+**/gen/
+frontend/src/api/generated/
