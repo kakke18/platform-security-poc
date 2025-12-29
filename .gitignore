@@ -3,7 +3,3 @@
 **/.claude/local/**
 
 .env
-
-# Generated files
-**/gen/
-frontend/src/api/generated/
