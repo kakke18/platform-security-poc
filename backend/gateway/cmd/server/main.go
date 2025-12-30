@@ -27,11 +27,12 @@ func main() {
 	}
 
 	// サーバーを作成
-	srv, err := server.New(cfg)
+	srv, cleanup, err := server.New(cfg)
 	if err != nil {
 		slog.Error("Failed to initialize server", "error", err)
 		panic(err)
 	}
+	defer cleanup()
 
 	// サーバーを別のゴルーチンで起動
 	go func() {

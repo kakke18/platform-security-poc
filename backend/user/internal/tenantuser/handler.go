@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"connectrpc.com/connect"
-	userv1 "github.com/kakke18/platform-security-poc/backend/user/gen/user/v1"
+	userv1 "github.com/kakke18/platform-security-poc/backend/gen/user/v1"
 )
 
 // Handler はTenantUserServiceの実装
