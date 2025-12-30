@@ -5,7 +5,6 @@ import (
 
 	"connectrpc.com/connect"
 	identityv1 "github.com/kakke18/platform-security-poc/identity/gen/identity/v1"
-	"github.com/kakke18/platform-security-poc/identity/internal/middleware"
 )
 
 // Handler はUserServiceの実装
@@ -25,14 +24,14 @@ func (h *Handler) GetMe(
 	ctx context.Context,
 	req *connect.Request[identityv1.GetMeRequest],
 ) (*connect.Response[identityv1.GetMeResponse], error) {
-	// コンテキストからJWT claimsを取得
-	claims, ok := middleware.GetClaims(ctx)
-	if !ok {
+	// ヘッダーからユーザーIDを取得（Gatewayで検証済み）
+	userID := req.Header().Get("X-User-ID")
+	if userID == "" {
 		return nil, connect.NewError(connect.CodeUnauthenticated, nil)
 	}
 
 	// Auth0ユーザーIDでデータベースからユーザーを取得
-	user, err := h.repo.FindByAuth0UserID(ctx, claims.Subject)
+	user, err := h.repo.FindByAuth0UserID(ctx, userID)
 	if err != nil {
 		return nil, connect.NewError(connect.CodeInternal, err)
 	}
@@ -49,14 +48,14 @@ func (h *Handler) UpdateMe(
 	ctx context.Context,
 	req *connect.Request[identityv1.UpdateMeRequest],
 ) (*connect.Response[identityv1.UpdateMeResponse], error) {
-	// コンテキストからJWT claimsを取得
-	claims, ok := middleware.GetClaims(ctx)
-	if !ok {
+	// ヘッダーからユーザーIDを取得（Gatewayで検証済み）
+	userID := req.Header().Get("X-User-ID")
+	if userID == "" {
 		return nil, connect.NewError(connect.CodeUnauthenticated, nil)
 	}
 
 	// データベースから現在のユーザーを取得
-	user, err := h.repo.FindByAuth0UserID(ctx, claims.Subject)
+	user, err := h.repo.FindByAuth0UserID(ctx, userID)
 	if err != nil {
 		return nil, connect.NewError(connect.CodeInternal, err)
 	}

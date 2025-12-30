@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"os"
 )
 
@@ -16,6 +17,12 @@ type Config struct {
 
 	// Port はサーバーのポート番号
 	Port string
+
+	// Auth0Domain はAuth0のドメイン
+	Auth0Domain string
+
+	// Auth0Audience はAuth0のオーディエンス
+	Auth0Audience string
 }
 
 // Load は環境変数から設定を読み込む
@@ -30,8 +37,20 @@ func Load() (*Config, error) {
 		port = defaultPort
 	}
 
+	auth0Domain := os.Getenv("AUTH0_DOMAIN")
+	if auth0Domain == "" {
+		return nil, fmt.Errorf("AUTH0_DOMAIN must be set")
+	}
+
+	auth0Audience := os.Getenv("AUTH0_AUDIENCE")
+	if auth0Audience == "" {
+		return nil, fmt.Errorf("AUTH0_AUDIENCE must be set")
+	}
+
 	return &Config{
 		IdentityAPIURL: identityAPIURL,
 		Port:           port,
+		Auth0Domain:    auth0Domain,
+		Auth0Audience:  auth0Audience,
 	}, nil
 }

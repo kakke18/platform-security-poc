@@ -19,6 +19,12 @@ type Server struct {
 
 // New は新しいサーバーを作成する
 func New(cfg *config.Config) (*Server, error) {
+	// JWTミドルウェアを初期化
+	jwtMiddleware, err := middleware.NewJWTMiddleware(cfg.Auth0Domain, cfg.Auth0Audience)
+	if err != nil {
+		return nil, err
+	}
+
 	// Identity APIのURLをパース
 	identityURL, err := url.Parse(cfg.IdentityAPIURL)
 	if err != nil {
@@ -40,10 +46,10 @@ func New(cfg *config.Config) (*Server, error) {
 	// マルチプレクサを作成
 	mux := http.NewServeMux()
 
-	// /identity.v1.UserService/* をIdentity APIにルーティング
-	mux.HandleFunc("/identity.v1.UserService/", func(w http.ResponseWriter, r *http.Request) {
+	// /identity.v1.UserService/* をIdentity APIにルーティング（JWT検証付き）
+	mux.Handle("/identity.v1.UserService/", jwtMiddleware.Middleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		identityProxy.ServeHTTP(w, r)
-	})
+	})))
 
 	// ヘルスチェックエンドポイント
 	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {

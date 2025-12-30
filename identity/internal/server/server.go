@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 
 	"golang.org/x/net/http2"
@@ -22,12 +21,6 @@ type Server struct {
 
 // New は新しいサーバーを作成する
 func New(cfg *config.Config) (*Server, error) {
-	// JWTミドルウェアを初期化
-	jwtMiddleware, err := middleware.NewJWTMiddleware(cfg.Auth0Domain, cfg.Auth0Audience)
-	if err != nil {
-		return nil, fmt.Errorf("failed to initialize JWT middleware: %w", err)
-	}
-
 	// ユーザー機能を初期化
 	userRepo := user.NewMockRepository()
 	userHandler := user.NewHandler(userRepo)
@@ -35,9 +28,9 @@ func New(cfg *config.Config) (*Server, error) {
 	// マルチプレクサを作成
 	mux := http.NewServeMux()
 
-	// UserServiceをJWTミドルウェアと共に登録
+	// UserServiceを登録（Gatewayで認証済み）
 	userPath, userConnectHandler := identityv1connect.NewUserServiceHandler(userHandler)
-	mux.Handle(userPath, jwtMiddleware.Middleware(userConnectHandler))
+	mux.Handle(userPath, userConnectHandler)
 
 	// ヘルスチェックエンドポイント
 	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {

@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"context"
 	"crypto/rsa"
 	"encoding/base64"
 	"encoding/json"
@@ -42,10 +41,10 @@ type JWTClaims struct {
 
 // JWTMiddleware はJWT検証ミドルウェアを提供する
 type JWTMiddleware struct {
-	domain   string
-	audience string
-	keys     map[string]*rsa.PublicKey
-	keysMu   sync.RWMutex
+	domain    string
+	audience  string
+	keys      map[string]*rsa.PublicKey
+	keysMu    sync.RWMutex
 	lastFetch time.Time
 }
 
@@ -203,15 +202,7 @@ func (m *JWTMiddleware) VerifyToken(tokenString string) (*JWTClaims, error) {
 	return claims, nil
 }
 
-// contextKey はコンテキストキーの型
-type contextKey string
-
-const (
-	// ClaimsContextKey はコンテキストにクレームを格納するためのキー
-	ClaimsContextKey contextKey = "jwt_claims"
-)
-
-// Middleware はJWTを検証するHTTPミドルウェアを返す
+// Middleware はJWTを検証し、subをX-User-IDヘッダーとして下流サービスに転送する
 func (m *JWTMiddleware) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Authorizationヘッダーからトークンを抽出
@@ -238,14 +229,9 @@ func (m *JWTMiddleware) Middleware(next http.Handler) http.Handler {
 			return
 		}
 
-		// クレームをコンテキストに追加
-		ctx := context.WithValue(r.Context(), ClaimsContextKey, claims)
-		next.ServeHTTP(w, r.WithContext(ctx))
-	})
-}
+		// ユーザーIDをヘッダーに追加（下流サービスで使用）
+		r.Header.Set("X-User-ID", claims.Subject)
 
-// GetClaims はコンテキストからJWTクレームを抽出する
-func GetClaims(ctx context.Context) (*JWTClaims, bool) {
-	claims, ok := ctx.Value(ClaimsContextKey).(*JWTClaims)
-	return claims, ok
+		next.ServeHTTP(w, r)
+	})
 }
