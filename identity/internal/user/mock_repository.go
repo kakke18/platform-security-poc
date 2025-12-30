@@ -19,13 +19,13 @@ func (r *MockRepository) FindByAuth0UserID(ctx context.Context, auth0UserID stri
 	// モックデータを返す
 	now := time.Now()
 	return &User{
-		ID:              "llu_mock_user_001",
+		ID:              "llu_001",
 		Auth0UserID:     auth0UserID,
-		WorkspaceID:     "ws_mock_workspace_001",
+		WorkspaceID:     "ws-001",
 		IsPrivileged:    false,
 		IdPConnectionID: nil,
 		Email:           "user01@example.com",
-		Name:            "Mock User 01",
+		Name:            "User 01",
 		CreatedAt:       now,
 		UpdatedAt:       now,
 	}, nil

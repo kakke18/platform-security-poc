@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file identity/v1/user.proto.
  */
 export const file_identity_v1_user: GenFile = /*@__PURE__*/
-  fileDesc("ChZpZGVudGl0eS92MS91c2VyLnByb3RvEgtpZGVudGl0eS52MSIOCgxHZXRNZVJlcXVlc3QiPQoNR2V0TWVSZXNwb25zZRIPCgd1c2VyX2lkGAEgASgJEg0KBWVtYWlsGAIgASgJEgwKBG5hbWUYAyABKAkiLQoPVXBkYXRlTWVSZXF1ZXN0EhEKBG5hbWUYASABKAlIAIgBAUIHCgVfbmFtZSJAChBVcGRhdGVNZVJlc3BvbnNlEg8KB3VzZXJfaWQYASABKAkSDQoFZW1haWwYAiABKAkSDAoEbmFtZRgDIAEoCTKaAQoLVXNlclNlcnZpY2USQAoFR2V0TWUSGS5pZGVudGl0eS52MS5HZXRNZVJlcXVlc3QaGi5pZGVudGl0eS52MS5HZXRNZVJlc3BvbnNlIgASSQoIVXBkYXRlTWUSHC5pZGVudGl0eS52MS5VcGRhdGVNZVJlcXVlc3QaHS5pZGVudGl0eS52MS5VcGRhdGVNZVJlc3BvbnNlIgBCGFoWaWRlbnRpdHkvdjE7aWRlbnRpdHl2MWIGcHJvdG8z");
+  fileDesc("ChZpZGVudGl0eS92MS91c2VyLnByb3RvEgtpZGVudGl0eS52MSIOCgxHZXRNZVJlcXVlc3QiQwoNR2V0TWVSZXNwb25zZRIVCg1hdXRoMF91c2VyX2lkGAEgASgJEg0KBWVtYWlsGAIgASgJEgwKBG5hbWUYAyABKAkiLQoPVXBkYXRlTWVSZXF1ZXN0EhEKBG5hbWUYASABKAlIAIgBAUIHCgVfbmFtZSJGChBVcGRhdGVNZVJlc3BvbnNlEhUKDWF1dGgwX3VzZXJfaWQYASABKAkSDQoFZW1haWwYAiABKAkSDAoEbmFtZRgDIAEoCTKaAQoLVXNlclNlcnZpY2USQAoFR2V0TWUSGS5pZGVudGl0eS52MS5HZXRNZVJlcXVlc3QaGi5pZGVudGl0eS52MS5HZXRNZVJlc3BvbnNlIgASSQoIVXBkYXRlTWUSHC5pZGVudGl0eS52MS5VcGRhdGVNZVJlcXVlc3QaHS5pZGVudGl0eS52MS5VcGRhdGVNZVJlc3BvbnNlIgBCTlpMZ2l0aHViLmNvbS9rYWtrZTE4L3BsYXRmb3JtLXNlY3VyaXR5LXBvYy9pZGVudGl0eS9nZW4vaWRlbnRpdHkvdjE7aWRlbnRpdHl2MWIGcHJvdG8z");
 
 /**
  * GetMeRequest is empty as user info comes from JWT
@@ -34,11 +34,11 @@ export const GetMeRequestSchema: GenMessage<GetMeRequest> = /*@__PURE__*/
  */
 export type GetMeResponse = Message<"identity.v1.GetMeResponse"> & {
   /**
-   * User ID (Auth0 sub claim)
+   * Auth0 User ID (Auth0 sub claim)
    *
-   * @generated from field: string user_id = 1;
+   * @generated from field: string auth0_user_id = 1;
    */
-  userId: string;
+  auth0UserId: string;
 
   /**
    * Email address
@@ -90,11 +90,11 @@ export const UpdateMeRequestSchema: GenMessage<UpdateMeRequest> = /*@__PURE__*/
  */
 export type UpdateMeResponse = Message<"identity.v1.UpdateMeResponse"> & {
   /**
-   * User ID
+   * Auth0 User ID
    *
-   * @generated from field: string user_id = 1;
+   * @generated from field: string auth0_user_id = 1;
    */
-  userId: string;
+  auth0UserId: string;
 
   /**
    * Email address

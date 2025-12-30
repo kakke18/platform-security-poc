@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package user.v1;
+
+option go_package = "github.com/kakke18/platform-security-poc/user/gen/user/v1;userv1";
+
+// Role はテナント内でのユーザーのロール
+enum Role {
+  // 未指定
+  ROLE_UNSPECIFIED = 0;
+  // 管理者
+  ROLE_ADMIN = 1;
+  // メンバー
+  ROLE_MEMBER = 2;
+  // 閲覧者
+  ROLE_VIEWER = 3;
+}
+
+// TenantUserService は Tenant User の管理を担当するサービス
+service TenantUserService {
+  // GetTenantUsers は現在の Workspace User が所属する Tenant User 一覧を取得する
+  // X-Workspace-User-ID ヘッダーから Workspace User ID を取得して、対応する Tenant User 一覧を返す
+  rpc GetTenantUsers(GetTenantUsersRequest) returns (GetTenantUsersResponse);
+}
+
+// GetTenantUsersRequest は GetTenantUsers のリクエスト
+message GetTenantUsersRequest {
+  // 空 - X-Workspace-User-ID ヘッダーから Workspace User ID を取得
+}
+
+// TenantUser は Tenant 内のユーザー情報
+message TenantUser {
+  // tenant_id はテナントID
+  string tenant_id = 1;
+
+  // tenant_user_id はテナントユーザーID
+  string tenant_user_id = 2;
+
+  // role はテナント内でのロール
+  Role role = 3;
+}
+
+// GetTenantUsersResponse は GetTenantUsers のレスポンス
+message GetTenantUsersResponse {
+  // users は Tenant User のリスト
+  repeated TenantUser users = 1;
+}

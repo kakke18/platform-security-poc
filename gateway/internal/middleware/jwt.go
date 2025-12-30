@@ -229,8 +229,8 @@ func (m *JWTMiddleware) Middleware(next http.Handler) http.Handler {
 			return
 		}
 
-		// ユーザーIDをヘッダーに追加（下流サービスで使用）
-		r.Header.Set("X-User-ID", claims.Subject)
+		// Auth0ユーザーIDをヘッダーに追加（下流サービスで使用）
+		r.Header.Set("X-Auth0-User-ID", claims.Subject)
 
 		next.ServeHTTP(w, r)
 	})

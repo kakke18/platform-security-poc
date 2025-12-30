@@ -11,6 +11,8 @@ import (
 	"github.com/kakke18/platform-security-poc/identity/internal/config"
 	"github.com/kakke18/platform-security-poc/identity/internal/middleware"
 	"github.com/kakke18/platform-security-poc/identity/internal/user"
+	"github.com/kakke18/platform-security-poc/identity/internal/workspace"
+	"github.com/kakke18/platform-security-poc/identity/internal/workspaceuser"
 )
 
 // Server はHTTPサーバーを表す
@@ -25,12 +27,23 @@ func New(cfg *config.Config) (*Server, error) {
 	userRepo := user.NewMockRepository()
 	userHandler := user.NewHandler(userRepo)
 
+	// Workspace機能を初期化
+	workspaceRepo := workspace.NewMockRepository()
+
+	// WorkspaceUser機能を初期化
+	workspaceUserRepo := workspaceuser.NewMockRepository()
+	workspaceUserHandler := workspaceuser.NewHandler(workspaceUserRepo, workspaceRepo)
+
 	// マルチプレクサを作成
 	mux := http.NewServeMux()
 
 	// UserServiceを登録（Gatewayで認証済み）
 	userPath, userConnectHandler := identityv1connect.NewUserServiceHandler(userHandler)
 	mux.Handle(userPath, userConnectHandler)
+
+	// WorkspaceUserServiceを登録（Gatewayで認証済み）
+	workspaceUserPath, workspaceUserConnectHandler := identityv1connect.NewWorkspaceUserServiceHandler(workspaceUserHandler)
+	mux.Handle(workspaceUserPath, workspaceUserConnectHandler)
 
 	// ヘルスチェックエンドポイント
 	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {

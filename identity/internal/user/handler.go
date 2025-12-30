@@ -24,8 +24,8 @@ func (h *Handler) GetMe(
 	ctx context.Context,
 	req *connect.Request[identityv1.GetMeRequest],
 ) (*connect.Response[identityv1.GetMeResponse], error) {
-	// ヘッダーからユーザーIDを取得（Gatewayで検証済み）
-	userID := req.Header().Get("X-User-ID")
+	// ヘッダーからAuth0ユーザーIDを取得（Gatewayで検証済み）
+	userID := req.Header().Get("X-Auth0-User-ID")
 	if userID == "" {
 		return nil, connect.NewError(connect.CodeUnauthenticated, nil)
 	}
@@ -37,9 +37,9 @@ func (h *Handler) GetMe(
 	}
 
 	return connect.NewResponse(&identityv1.GetMeResponse{
-		UserId: user.Auth0UserID,
-		Email:  user.Email,
-		Name:   user.Name,
+		Auth0UserId: user.Auth0UserID,
+		Email:       user.Email,
+		Name:        user.Name,
 	}), nil
 }
 
@@ -48,8 +48,8 @@ func (h *Handler) UpdateMe(
 	ctx context.Context,
 	req *connect.Request[identityv1.UpdateMeRequest],
 ) (*connect.Response[identityv1.UpdateMeResponse], error) {
-	// ヘッダーからユーザーIDを取得（Gatewayで検証済み）
-	userID := req.Header().Get("X-User-ID")
+	// ヘッダーからAuth0ユーザーIDを取得（Gatewayで検証済み）
+	userID := req.Header().Get("X-Auth0-User-ID")
 	if userID == "" {
 		return nil, connect.NewError(connect.CodeUnauthenticated, nil)
 	}
@@ -71,8 +71,8 @@ func (h *Handler) UpdateMe(
 	}
 
 	return connect.NewResponse(&identityv1.UpdateMeResponse{
-		UserId: user.Auth0UserID,
-		Email:  user.Email,
-		Name:   user.Name,
+		Auth0UserId: user.Auth0UserID,
+		Email:       user.Email,
+		Name:        user.Name,
 	}), nil
 }

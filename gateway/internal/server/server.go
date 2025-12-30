@@ -6,7 +6,9 @@ import (
 	"net/http/httputil"
 	"net/url"
 
+	"github.com/kakke18/platform-security-poc/gateway/gen/gateway/v1/gatewayv1connect"
 	"github.com/kakke18/platform-security-poc/gateway/internal/config"
+	"github.com/kakke18/platform-security-poc/gateway/internal/me"
 	"github.com/kakke18/platform-security-poc/gateway/internal/middleware"
 	"github.com/rs/cors"
 )
@@ -43,8 +45,15 @@ func New(cfg *config.Config) (*Server, error) {
 		// req.URL.Path はすでに設定されている
 	}
 
+	// Me APIハンドラーを初期化
+	meHandler := me.NewHandler(cfg.IdentityAPIURL, cfg.UserAPIURL)
+
 	// マルチプレクサを作成
 	mux := http.NewServeMux()
+
+	// MeServiceを登録（JWT検証付き）
+	mePath, meConnectHandler := gatewayv1connect.NewMeServiceHandler(meHandler)
+	mux.Handle(mePath, jwtMiddleware.Middleware(meConnectHandler))
 
 	// /identity.v1.UserService/* をIdentity APIにルーティング（JWT検証付き）
 	mux.Handle("/identity.v1.UserService/", jwtMiddleware.Middleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
