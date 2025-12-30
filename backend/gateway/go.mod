@@ -1,6 +1,6 @@
 module github.com/kakke18/platform-security-poc/backend/gateway
 
-go 1.25
+go 1.25.5
 
 require (
 	connectrpc.com/connect v1.19.1

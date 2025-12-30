@@ -2,4 +2,6 @@
 .claude/settings.local.json
 **/.claude/local/**
 
+# Backend
 .env
+**/tmp/
