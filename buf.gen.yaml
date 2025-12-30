@@ -2,33 +2,17 @@ version: v2
 inputs:
   - directory: proto
 plugins:
-  # Gateway service
+  # Backend services (shared)
   - remote: buf.build/protocolbuffers/go
-    out: backend/gateway/gen
+    out: backend/gen
     opt:
       - paths=source_relative
   - remote: buf.build/connectrpc/go
-    out: backend/gateway/gen
+    out: backend/gen
     opt:
       - paths=source_relative
-
-  # Identity service
-  - remote: buf.build/protocolbuffers/go
-    out: backend/identity/gen
-    opt:
-      - paths=source_relative
-  - remote: buf.build/connectrpc/go
-    out: backend/identity/gen
-    opt:
-      - paths=source_relative
-
-  # User service
-  - remote: buf.build/protocolbuffers/go
-    out: backend/user/gen
-    opt:
-      - paths=source_relative
-  - remote: buf.build/connectrpc/go
-    out: backend/user/gen
+  - remote: buf.build/grpc/go
+    out: backend/gen
     opt:
       - paths=source_relative
 

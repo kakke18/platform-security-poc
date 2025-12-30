@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"connectrpc.com/connect"
-	identityv1 "github.com/kakke18/platform-security-poc/backend/identity/gen/identity/v1"
+	identityv1 "github.com/kakke18/platform-security-poc/backend/gen/identity/v1"
 	"github.com/kakke18/platform-security-poc/backend/identity/internal/workspace"
 )
 
