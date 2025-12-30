@@ -1,6 +1,7 @@
 import { getAccessToken } from '@auth0/nextjs-auth0/client';
 import { createClient, type Interceptor } from '@connectrpc/connect';
 import { createConnectTransport } from '@connectrpc/connect-web';
+import { MeService } from './generated/gateway/v1/me_pb';
 import { UserService } from './generated/identity/v1/user_pb';
 
 /**
@@ -46,3 +47,10 @@ const transport = createConnectTransport({
  * 自動的にAuth0トークンを付与してバックエンドAPIにリクエストを送信
  */
 export const userServiceClient = createClient(UserService, transport);
+
+/**
+ * MeService Connect クライアント
+ * Identity と User Service の情報を統合して返すGateway API
+ * 自動的にAuth0トークンを付与してバックエンドAPIにリクエストを送信
+ */
+export const meServiceClient = createClient(MeService, transport);

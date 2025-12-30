@@ -7,6 +7,7 @@ import (
 
 const (
 	defaultIdentityAPIURL = "http://localhost:8081"
+	defaultUserAPIURL     = "http://localhost:8082"
 	defaultPort           = "8080"
 )
 
@@ -14,6 +15,9 @@ const (
 type Config struct {
 	// IdentityAPIURL はIdentity APIのベースURL
 	IdentityAPIURL string
+
+	// UserAPIURL はUser APIのベースURL
+	UserAPIURL string
 
 	// Port はサーバーのポート番号
 	Port string
@@ -30,6 +34,11 @@ func Load() (*Config, error) {
 	identityAPIURL := os.Getenv("IDENTITY_API_URL")
 	if identityAPIURL == "" {
 		identityAPIURL = defaultIdentityAPIURL
+	}
+
+	userAPIURL := os.Getenv("USER_API_URL")
+	if userAPIURL == "" {
+		userAPIURL = defaultUserAPIURL
 	}
 
 	port := os.Getenv("PORT")
@@ -49,6 +58,7 @@ func Load() (*Config, error) {
 
 	return &Config{
 		IdentityAPIURL: identityAPIURL,
+		UserAPIURL:     userAPIURL,
 		Port:           port,
 		Auth0Domain:    auth0Domain,
 		Auth0Audience:  auth0Audience,

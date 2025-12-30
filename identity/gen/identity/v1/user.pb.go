@@ -61,8 +61,8 @@ func (*GetMeRequest) Descriptor() ([]byte, []int) {
 // GetMeResponse returns the current user's information
 type GetMeResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// User ID (Auth0 sub claim)
-	UserId string `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	// Auth0 User ID (Auth0 sub claim)
+	Auth0UserId string `protobuf:"bytes,1,opt,name=auth0_user_id,json=auth0UserId,proto3" json:"auth0_user_id,omitempty"`
 	// Email address
 	Email string `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
 	// Display name
@@ -101,9 +101,9 @@ func (*GetMeResponse) Descriptor() ([]byte, []int) {
 	return file_identity_v1_user_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *GetMeResponse) GetUserId() string {
+func (x *GetMeResponse) GetAuth0UserId() string {
 	if x != nil {
-		return x.UserId
+		return x.Auth0UserId
 	}
 	return ""
 }
@@ -171,8 +171,8 @@ func (x *UpdateMeRequest) GetName() string {
 // UpdateMeResponse returns the updated user information
 type UpdateMeResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// User ID
-	UserId string `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	// Auth0 User ID
+	Auth0UserId string `protobuf:"bytes,1,opt,name=auth0_user_id,json=auth0UserId,proto3" json:"auth0_user_id,omitempty"`
 	// Email address
 	Email string `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
 	// Display name
@@ -211,9 +211,9 @@ func (*UpdateMeResponse) Descriptor() ([]byte, []int) {
 	return file_identity_v1_user_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *UpdateMeResponse) GetUserId() string {
+func (x *UpdateMeResponse) GetAuth0UserId() string {
 	if x != nil {
-		return x.UserId
+		return x.Auth0UserId
 	}
 	return ""
 }
@@ -237,21 +237,21 @@ var File_identity_v1_user_proto protoreflect.FileDescriptor
 const file_identity_v1_user_proto_rawDesc = "" +
 	"\n" +
 	"\x16identity/v1/user.proto\x12\videntity.v1\"\x0e\n" +
-	"\fGetMeRequest\"R\n" +
-	"\rGetMeResponse\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x14\n" +
+	"\fGetMeRequest\"]\n" +
+	"\rGetMeResponse\x12\"\n" +
+	"\rauth0_user_id\x18\x01 \x01(\tR\vauth0UserId\x12\x14\n" +
 	"\x05email\x18\x02 \x01(\tR\x05email\x12\x12\n" +
 	"\x04name\x18\x03 \x01(\tR\x04name\"3\n" +
 	"\x0fUpdateMeRequest\x12\x17\n" +
 	"\x04name\x18\x01 \x01(\tH\x00R\x04name\x88\x01\x01B\a\n" +
-	"\x05_name\"U\n" +
-	"\x10UpdateMeResponse\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x14\n" +
+	"\x05_name\"`\n" +
+	"\x10UpdateMeResponse\x12\"\n" +
+	"\rauth0_user_id\x18\x01 \x01(\tR\vauth0UserId\x12\x14\n" +
 	"\x05email\x18\x02 \x01(\tR\x05email\x12\x12\n" +
 	"\x04name\x18\x03 \x01(\tR\x04name2\x9a\x01\n" +
 	"\vUserService\x12@\n" +
 	"\x05GetMe\x12\x19.identity.v1.GetMeRequest\x1a\x1a.identity.v1.GetMeResponse\"\x00\x12I\n" +
-	"\bUpdateMe\x12\x1c.identity.v1.UpdateMeRequest\x1a\x1d.identity.v1.UpdateMeResponse\"\x00B\x18Z\x16identity/v1;identityv1b\x06proto3"
+	"\bUpdateMe\x12\x1c.identity.v1.UpdateMeRequest\x1a\x1d.identity.v1.UpdateMeResponse\"\x00BNZLgithub.com/kakke18/platform-security-poc/identity/gen/identity/v1;identityv1b\x06proto3"
 
 var (
 	file_identity_v1_user_proto_rawDescOnce sync.Once

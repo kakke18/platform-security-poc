@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package identity.v1;
 
-option go_package = "identity/v1;identityv1";
+option go_package = "github.com/kakke18/platform-security-poc/identity/gen/identity/v1;identityv1";
 
 // UserService handles user management operations
 // Requires JWT authentication via Authorization header
@@ -19,8 +19,8 @@ message GetMeRequest {}
 
 // GetMeResponse returns the current user's information
 message GetMeResponse {
-  // User ID (Auth0 sub claim)
-  string user_id = 1;
+  // Auth0 User ID (Auth0 sub claim)
+  string auth0_user_id = 1;
 
   // Email address
   string email = 2;
@@ -37,8 +37,8 @@ message UpdateMeRequest {
 
 // UpdateMeResponse returns the updated user information
 message UpdateMeResponse {
-  // User ID
-  string user_id = 1;
+  // Auth0 User ID
+  string auth0_user_id = 1;
 
   // Email address
   string email = 2;

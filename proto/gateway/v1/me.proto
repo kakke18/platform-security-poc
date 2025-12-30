@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package gateway.v1;
+
+option go_package = "github.com/kakke18/platform-security-poc/gateway/gen/gateway/v1;gatewayv1";
+
+// Role はテナント内でのユーザーのロール
+enum Role {
+  // 未指定
+  ROLE_UNSPECIFIED = 0;
+  // 管理者
+  ROLE_ADMIN = 1;
+  // メンバー
+  ROLE_MEMBER = 2;
+  // 閲覧者
+  ROLE_VIEWER = 3;
+}
+
+// MeService は現在認証されているユーザーの統合情報を提供するサービス
+// Identity と User Service の情報を統合して返す
+service MeService {
+  // GetMe は現在認証されているユーザーの全情報を取得する
+  // Identity API と User Service API を呼び出して統合したレスポンスを返す
+  rpc GetMe(GetMeRequest) returns (GetMeResponse);
+}
+
+// GetMeRequest は GetMe のリクエスト
+message GetMeRequest {
+  // 空 - Authorization ヘッダーから JWT を取得して検証
+}
+
+// TenantUserInfo は Tenant 内のユーザー情報
+message TenantUserInfo {
+  // tenant_id はテナントID
+  string tenant_id = 1;
+
+  // tenant_user_id はテナントユーザーID
+  string tenant_user_id = 2;
+
+  // role はテナント内でのロール
+  Role role = 3;
+}
+
+// GetMeResponse は GetMe のレスポンス
+message GetMeResponse {
+  // workspace_id はワークスペースID (from Identity)
+  string workspace_id = 1;
+
+  // workspace_user_id はワークスペースユーザーID (from Identity)
+  string workspace_user_id = 2;
+
+  // email はメールアドレス (from Identity)
+  string email = 3;
+
+  // name は表示名 (from Identity)
+  string name = 4;
+
+  // tenants は所属する Tenant の一覧 (from User Service)
+  repeated TenantUserInfo tenants = 5;
+}
