@@ -4,31 +4,31 @@ inputs:
 plugins:
   # Gateway service
   - remote: buf.build/protocolbuffers/go
-    out: gateway/gen
+    out: backend/gateway/gen
     opt:
       - paths=source_relative
   - remote: buf.build/connectrpc/go
-    out: gateway/gen
+    out: backend/gateway/gen
     opt:
       - paths=source_relative
 
   # Identity service
   - remote: buf.build/protocolbuffers/go
-    out: identity/gen
+    out: backend/identity/gen
     opt:
       - paths=source_relative
   - remote: buf.build/connectrpc/go
-    out: identity/gen
+    out: backend/identity/gen
     opt:
       - paths=source_relative
 
   # User service
   - remote: buf.build/protocolbuffers/go
-    out: user/gen
+    out: backend/user/gen
     opt:
       - paths=source_relative
   - remote: buf.build/connectrpc/go
-    out: user/gen
+    out: backend/user/gen
     opt:
       - paths=source_relative
 

@@ -9,7 +9,7 @@
 ### 実装済み機能
 
 - **Auth0認証**: OAuth 2.0 / OIDC ベースの認証（Authorization Code Flow + HttpOnly Cookie）
-- **BFF (Gateway)**: JWT検証、認証・認可の一元管理、X-User-IDヘッダー付与
+- **BFF (Gateway)**: JWT検証、認証・認可の一元管理、検証済みユーザーIDヘッダー付与
 - **内部サービス**: Gatewayで検証済みのユーザーIDを信頼した処理
 - **ユーザー情報管理**: Connect RPC (gRPC互換) によるAPI通信
 
@@ -37,23 +37,23 @@
 │  - JWT検証 (Auth0 JWKS)                         │
 │  - 認証・認可の一元管理                          │
 │  - リバースプロキシ                              │
-└──────────────────┬──────────────────────────────┘
-                   │ HTTP (内部ネットワーク)
-                   │ X-User-ID ヘッダー付与
-                   ▼
-┌─────────────────────────────────────────────────┐
-│         Identity API - Port 8081                │
-│  - ユーザー情報管理                              │
-│  - X-User-ID ヘッダーからユーザー取得            │
-│  - ビジネスロジックのみ (JWT検証不要)            │
-└──────────────────┬──────────────────────────────┘
-                   │
-        ┌──────────┴──────────┐
-        ▼                     ▼
-┌──────────────┐      ┌──────────────┐
-│    Auth0     │      │  Database    │
-│  (JWKS提供)  │      │ (Mock実装)   │
-└──────────────┘      └──────────────┘
+└───────┬──────────────────────┬──────────────────┘
+        │                      │
+        │ X-Auth0-User-ID      │ X-Workspace-User-ID
+        ▼                      ▼
+┌──────────────────┐    ┌──────────────────┐
+│  Identity API    │    │   User API       │
+│  Port 8081       │    │   Port 8082      │
+│  - Workspace     │    │  - Tenant User   │
+│    User 管理     │    │    一覧取得      │
+└────────┬─────────┘    └──────────────────┘
+         │
+    ┌────┴────┐
+    ▼         ▼
+┌────────┐ ┌────────┐
+│ Auth0  │ │  DB    │
+│ JWKS   │ │ Mock   │
+└────────┘ └────────┘
 ```
 
 ### セキュリティレイヤー
@@ -61,8 +61,8 @@
 | レイヤー | 責務 | 実装内容 |
 |----------|------|----------|
 | **Frontend** | セッション管理 | HttpOnly Cookie、トークン自動リフレッシュ |
-| **Gateway** | 認証・認可 | JWT検証、ユーザー情報取得、X-User-IDヘッダー付与 |
-| **Identity** | ビジネスロジック | Gatewayからの信頼済みリクエスト処理 |
+| **Gateway** | 認証・認可 | JWT検証、ユーザー情報取得、検証済みユーザーIDヘッダー付与 (X-Auth0-User-ID, X-Workspace-User-ID) |
+| **Identity** | ビジネスロジック | Gatewayからの信頼済みリクエスト処理 (X-Auth0-User-ID を信頼) |
 
 **注意**: 現在はGateway-Identity間はHTTP通信。本番環境ではmTLSまたはネットワーク分離を実装推奨。
 
@@ -96,25 +96,37 @@ platform-security-poc/
 │   │   └── libs/auth/
 │   └── config/
 │       └── .env.local.json
-├── gateway/                    # Gateway (BFF)
-│   ├── cmd/server/
-│   └── internal/
-│       ├── config/
-│       ├── middleware/
-│       │   ├── jwt.go              # JWT検証
-│       │   └── logging.go
-│       └── server/
-├── identity/                   # Identity API
-│   ├── cmd/server/
-│   └── internal/
-│       ├── config/
-│       ├── server/
-│       ├── user/
-│       │   ├── handler.go          # X-User-ID から取得
-│       │   ├── repository.go
-│       │   └── mock_repository.go
-│       └── middleware/
-│           └── logging.go
+├── backend/                    # Backend services
+│   ├── gateway/                # Gateway (BFF)
+│   │   ├── cmd/server/
+│   │   └── internal/
+│   │       ├── config/
+│   │       ├── middleware/
+│   │       │   ├── jwt.go          # JWT検証
+│   │       │   └── logging.go
+│   │       └── server/
+│   ├── identity/               # Identity API
+│   │   ├── cmd/server/
+│   │   └── internal/
+│   │       ├── config/
+│   │       ├── server/
+│   │       ├── user/
+│   │       │   ├── handler.go      # X-Auth0-User-ID から取得
+│   │       │   ├── repository.go
+│   │       │   └── mock_repository.go
+│   │       ├── workspaceuser/
+│   │       │   ├── handler.go      # X-Auth0-User-ID から取得
+│   │       │   └── mock_repository.go
+│   │       └── middleware/
+│   │           └── logging.go
+│   ├── user/                   # User API
+│   │   ├── cmd/server/
+│   │   └── internal/
+│   │       ├── tenantuser/
+│   │       │   ├── handler.go      # X-Workspace-User-ID から取得
+│   │       │   └── mock_repository.go
+│   │       └── middleware/
+│   └── go.work                 # Go workspace
 ├── terraform/                  # Terraform設定（Auth0）
 ├── buf.gen.yaml                # Buf code generation config
 ├── buf.yaml                    # Buf config
@@ -133,27 +145,42 @@ platform-security-poc/
 | JWT検証 | Auth0のJWKSを使用したトークン検証 |
 | 認証・認可 | ユーザー認証とアクセス制御の一元管理 |
 | リバースプロキシ | 内部APIへのリクエスト転送 |
-| ヘッダー付与 | 検証済みユーザーIDを`X-User-ID`ヘッダーで転送 |
+| ヘッダー付与 | 検証済みAuth0 User IDを`X-Auth0-User-ID`ヘッダーで転送 |
+| サービス統合 | Identity APIとUser APIを呼び出して統合レスポンスを返却 |
 
 **セキュリティ実装**:
 - Auth0のJWKSから公開鍵を取得してJWT署名検証
 - トークン有効期限・発行者・オーディエンスの検証
-- 検証済みユーザーID (`sub`) をヘッダーで下流に転送
+- 検証済みAuth0 User ID (`sub`) を`X-Auth0-User-ID`ヘッダーで下流に転送
+- Identity APIから取得したWorkspace User IDを`X-Workspace-User-ID`ヘッダーでUser APIに転送
 
 ### Identity API
 
-ユーザー情報管理を担当する内部サービス。
+Workspace User情報管理を担当する内部サービス。
 
 | 機能 | 説明 |
 |------|------|
-| ユーザー情報取得 | `X-User-ID`ヘッダーからユーザー情報を返却 |
+| Workspace User情報取得 | `X-Auth0-User-ID`ヘッダーからWorkspace User情報を返却 |
 
 **セキュリティ実装**:
 - Gatewayからの信頼済みリクエストのみ処理
-- `X-User-ID`ヘッダーの存在チェックのみ（JWT検証不要）
+- `X-Auth0-User-ID`ヘッダーの存在チェックのみ（JWT検証不要）
 - ビジネスロジックに専念
 
 **注意**: JWT検証やAuth0連携は全てGatewayで実施。Identity APIは内部サービスとしてGatewayからの信頼済みリクエストのみを処理します。
+
+### User API
+
+Tenant User情報管理を担当する内部サービス。
+
+| 機能 | 説明 |
+|------|------|
+| Tenant User一覧取得 | `X-Workspace-User-ID`ヘッダーからTenant User一覧を返却 |
+
+**セキュリティ実装**:
+- Gatewayからの信頼済みリクエストのみ処理
+- `X-Workspace-User-ID`ヘッダーの存在チェックのみ（JWT検証不要）
+- ビジネスロジックに専念
 
 ## セットアップ
 
@@ -196,11 +223,11 @@ openssl rand -hex 32
 
 ### 3. 起動
 
-**Identity API と Gateway の環境変数設定** (direnv推奨):
+**Backend サービスの環境変数設定** (direnv推奨):
 
 ```bash
 # Identity API
-cd identity
+cd backend/identity
 cp .env.example .env
 # .env を編集してAuth0の認証情報を設定
 
@@ -208,19 +235,24 @@ cp .env.example .env
 cd ../gateway
 cp .env.example .env
 # 必要に応じて .env を編集
+
+# User API
+cd ../user
+cp .env.example .env
+# 必要に応じて .env を編集
 ```
 
 **ターミナル1: Identity API**
 
 ```bash
-cd identity
+cd backend/identity
 go run ./cmd/server
 ```
 
 **ターミナル2: Gateway**
 
 ```bash
-cd gateway
+cd backend/gateway
 go run ./cmd/server
 ```
 
@@ -232,11 +264,19 @@ pnpm install
 pnpm dev
 ```
 
+**ターミナル4: User API**
+
+```bash
+cd backend/user
+go run ./cmd/server
+```
+
 ### 4. アクセス
 
 - Frontend: http://localhost:3000
 - Gateway: http://localhost:8080
 - Identity API: http://localhost:8081
+- User API: http://localhost:8082
 
 ブラウザで http://localhost:3000 を開くと、Auth0のログイン画面にリダイレクトされます。
 
