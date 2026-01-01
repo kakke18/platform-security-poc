@@ -51,8 +51,9 @@ func New(cfg *config.Config) (*Server, error) {
 		w.Write([]byte("OK"))
 	})
 
-	// ハンドラーチェーンを構築: AccessLog -> h2c -> mux
-	finalHandler := middleware.AccessLog(h2c.NewHandler(mux, &http2.Server{}))
+	// ハンドラーチェーンを構築: h2c -> AccessLog -> mux
+	// h2cハンドラーを最外層に配置することで、HTTP/2接続の確立を優先
+	finalHandler := h2c.NewHandler(middleware.AccessLog(mux), &http2.Server{})
 
 	httpServer := &http.Server{
 		Addr:    ":" + cfg.Port,

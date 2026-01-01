@@ -2,9 +2,12 @@ package me
 
 import (
 	"context"
+	"crypto/tls"
+	"net"
 	"net/http"
 
 	"connectrpc.com/connect"
+	"golang.org/x/net/http2"
 	gatewayv1 "github.com/kakke18/platform-security-poc/backend/gen/gateway/v1"
 	"github.com/kakke18/platform-security-poc/backend/gen/gateway/v1/gatewayv1connect"
 	identityv1 "github.com/kakke18/platform-security-poc/backend/gen/identity/v1"
@@ -20,15 +23,30 @@ type Handler struct {
 }
 
 // NewHandler は新しいMeハンドラーを作成する
+// gRPCプロトコル（HTTP/2 over cleartext）を使用してバックエンドサービスと通信
 func NewHandler(identityAPIURL, userAPIURL string) *Handler {
+	// HTTP/2クライアントを作成（h2c: HTTP/2 Cleartext）
+	h2cClient := &http.Client{
+		Transport: &http2.Transport{
+			// h2c (HTTP/2 without TLS) を許可
+			AllowHTTP: true,
+			DialTLS: func(network, addr string, cfg *tls.Config) (net.Conn, error) {
+				// TLSダイヤルの代わりに通常のダイヤルを使用
+				return net.Dial(network, addr)
+			},
+		},
+	}
+
 	return &Handler{
 		workspaceUserClient: identityv1connect.NewWorkspaceUserServiceClient(
-			http.DefaultClient,
+			h2cClient,
 			identityAPIURL,
+			connect.WithGRPC(), // gRPCプロトコルを使用
 		),
 		tenantUserClient: userv1connect.NewTenantUserServiceClient(
-			http.DefaultClient,
+			h2cClient,
 			userAPIURL,
+			connect.WithGRPC(), // gRPCプロトコルを使用
 		),
 	}
 }
