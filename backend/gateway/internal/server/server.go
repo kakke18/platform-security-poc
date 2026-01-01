@@ -6,7 +6,7 @@ import (
 	"net/http/httputil"
 	"net/url"
 
-	"github.com/kakke18/platform-security-poc/backend/gateway/gen/gateway/v1/gatewayv1connect"
+	"github.com/kakke18/platform-security-poc/backend/gen/gateway/v1/gatewayv1connect"
 	"github.com/kakke18/platform-security-poc/backend/gateway/internal/config"
 	"github.com/kakke18/platform-security-poc/backend/gateway/internal/me"
 	"github.com/kakke18/platform-security-poc/backend/gateway/internal/middleware"

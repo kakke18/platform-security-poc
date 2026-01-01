@@ -5,12 +5,12 @@ import (
 	"net/http"
 
 	"connectrpc.com/connect"
-	gatewayv1 "github.com/kakke18/platform-security-poc/backend/gateway/gen/gateway/v1"
-	"github.com/kakke18/platform-security-poc/backend/gateway/gen/gateway/v1/gatewayv1connect"
-	identityv1 "github.com/kakke18/platform-security-poc/backend/identity/gen/identity/v1"
-	"github.com/kakke18/platform-security-poc/backend/identity/gen/identity/v1/identityv1connect"
-	userv1 "github.com/kakke18/platform-security-poc/backend/user/gen/user/v1"
-	"github.com/kakke18/platform-security-poc/backend/user/gen/user/v1/userv1connect"
+	gatewayv1 "github.com/kakke18/platform-security-poc/backend/gen/gateway/v1"
+	"github.com/kakke18/platform-security-poc/backend/gen/gateway/v1/gatewayv1connect"
+	identityv1 "github.com/kakke18/platform-security-poc/backend/gen/identity/v1"
+	"github.com/kakke18/platform-security-poc/backend/gen/identity/v1/identityv1connect"
+	userv1 "github.com/kakke18/platform-security-poc/backend/gen/user/v1"
+	"github.com/kakke18/platform-security-poc/backend/gen/user/v1/userv1connect"
 )
 
 // Handler はMeServiceの実装

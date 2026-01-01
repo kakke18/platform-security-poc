@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package identity.v1;
 
-option go_package = "github.com/kakke18/platform-security-poc/backend/identity/gen/identity/v1;identityv1";
+option go_package = "github.com/kakke18/platform-security-poc/backend/gen/identity/v1;identityv1";
 
 // UserService handles user management operations
 // Requires JWT authentication via Authorization header

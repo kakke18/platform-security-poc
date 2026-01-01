@@ -7,7 +7,7 @@ import (
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 
-	"github.com/kakke18/platform-security-poc/backend/identity/gen/identity/v1/identityv1connect"
+	"github.com/kakke18/platform-security-poc/backend/gen/identity/v1/identityv1connect"
 	"github.com/kakke18/platform-security-poc/backend/identity/internal/config"
 	"github.com/kakke18/platform-security-poc/backend/identity/internal/middleware"
 	"github.com/kakke18/platform-security-poc/backend/identity/internal/user"
