@@ -245,7 +245,7 @@ const file_user_v1_tenant_user_proto_rawDesc = "" +
 	"\vROLE_MEMBER\x10\x02\x12\x0f\n" +
 	"\vROLE_VIEWER\x10\x032f\n" +
 	"\x11TenantUserService\x12Q\n" +
-	"\x0eGetTenantUsers\x12\x1e.user.v1.GetTenantUsersRequest\x1a\x1f.user.v1.GetTenantUsersResponseBJZHgithub.com/kakke18/platform-security-poc/backend/user/gen/user/v1;userv1b\x06proto3"
+	"\x0eGetTenantUsers\x12\x1e.user.v1.GetTenantUsersRequest\x1a\x1f.user.v1.GetTenantUsersResponseBEZCgithub.com/kakke18/platform-security-poc/backend/gen/user/v1;userv1b\x06proto3"
 
 var (
 	file_user_v1_tenant_user_proto_rawDescOnce sync.Once

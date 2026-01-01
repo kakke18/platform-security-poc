@@ -28,7 +28,7 @@ func New(cfg *config.Config) (*Server, error) {
 	// マルチプレクサを作成
 	mux := http.NewServeMux()
 
-	// TenantUserServiceを登録
+	// TenantUserServiceを登録（Gatewayで認証済み）
 	tenantUserPath, tenantUserConnectHandler := userv1connect.NewTenantUserServiceHandler(tenantUserHandler)
 	mux.Handle(tenantUserPath, tenantUserConnectHandler)
 

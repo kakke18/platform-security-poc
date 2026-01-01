@@ -143,7 +143,7 @@ const file_identity_v1_workspace_user_proto_rawDesc = "" +
 	"\x05email\x18\x03 \x01(\tR\x05email\x12\x12\n" +
 	"\x04name\x18\x04 \x01(\tR\x04name2w\n" +
 	"\x14WorkspaceUserService\x12_\n" +
-	"\x10GetWorkspaceUser\x12$.identity.v1.GetWorkspaceUserRequest\x1a%.identity.v1.GetWorkspaceUserResponseBVZTgithub.com/kakke18/platform-security-poc/backend/identity/gen/identity/v1;identityv1b\x06proto3"
+	"\x10GetWorkspaceUser\x12$.identity.v1.GetWorkspaceUserRequest\x1a%.identity.v1.GetWorkspaceUserResponseBMZKgithub.com/kakke18/platform-security-poc/backend/gen/identity/v1;identityv1b\x06proto3"
 
 var (
 	file_identity_v1_workspace_user_proto_rawDescOnce sync.Once

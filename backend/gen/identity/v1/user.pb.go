@@ -251,7 +251,7 @@ const file_identity_v1_user_proto_rawDesc = "" +
 	"\x04name\x18\x03 \x01(\tR\x04name2\x9a\x01\n" +
 	"\vUserService\x12@\n" +
 	"\x05GetMe\x12\x19.identity.v1.GetMeRequest\x1a\x1a.identity.v1.GetMeResponse\"\x00\x12I\n" +
-	"\bUpdateMe\x12\x1c.identity.v1.UpdateMeRequest\x1a\x1d.identity.v1.UpdateMeResponse\"\x00BVZTgithub.com/kakke18/platform-security-poc/backend/identity/gen/identity/v1;identityv1b\x06proto3"
+	"\bUpdateMe\x12\x1c.identity.v1.UpdateMeRequest\x1a\x1d.identity.v1.UpdateMeResponse\"\x00BMZKgithub.com/kakke18/platform-security-poc/backend/gen/identity/v1;identityv1b\x06proto3"
 
 var (
 	file_identity_v1_user_proto_rawDescOnce sync.Once

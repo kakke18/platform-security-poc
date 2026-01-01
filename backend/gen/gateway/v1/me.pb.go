@@ -285,7 +285,7 @@ const file_gateway_v1_me_proto_rawDesc = "" +
 	"\vROLE_MEMBER\x10\x02\x12\x0f\n" +
 	"\vROLE_VIEWER\x10\x032I\n" +
 	"\tMeService\x12<\n" +
-	"\x05GetMe\x12\x18.gateway.v1.GetMeRequest\x1a\x19.gateway.v1.GetMeResponseBSZQgithub.com/kakke18/platform-security-poc/backend/gateway/gen/gateway/v1;gatewayv1b\x06proto3"
+	"\x05GetMe\x12\x18.gateway.v1.GetMeRequest\x1a\x19.gateway.v1.GetMeResponseBKZIgithub.com/kakke18/platform-security-poc/backend/gen/gateway/v1;gatewayv1b\x06proto3"
 
 var (
 	file_gateway_v1_me_proto_rawDescOnce sync.Once

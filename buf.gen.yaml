@@ -2,16 +2,12 @@ version: v2
 inputs:
   - directory: proto
 plugins:
-  # Backend services (shared)
+  # Backend Go code
   - remote: buf.build/protocolbuffers/go
     out: backend/gen
     opt:
       - paths=source_relative
   - remote: buf.build/connectrpc/go
-    out: backend/gen
-    opt:
-      - paths=source_relative
-  - remote: buf.build/grpc/go
     out: backend/gen
     opt:
       - paths=source_relative

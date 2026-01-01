@@ -2,65 +2,35 @@ package me
 
 import (
 	"context"
-	"log/slog"
+	"net/http"
 
 	"connectrpc.com/connect"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
-	"google.golang.org/grpc/metadata"
-
 	gatewayv1 "github.com/kakke18/platform-security-poc/backend/gen/gateway/v1"
 	"github.com/kakke18/platform-security-poc/backend/gen/gateway/v1/gatewayv1connect"
 	identityv1 "github.com/kakke18/platform-security-poc/backend/gen/identity/v1"
+	"github.com/kakke18/platform-security-poc/backend/gen/identity/v1/identityv1connect"
 	userv1 "github.com/kakke18/platform-security-poc/backend/gen/user/v1"
+	"github.com/kakke18/platform-security-poc/backend/gen/user/v1/userv1connect"
 )
 
 // Handler はMeServiceの実装
 type Handler struct {
-	workspaceUserClient identityv1.WorkspaceUserServiceClient
-	tenantUserClient    userv1.TenantUserServiceClient
-	identityConn        *grpc.ClientConn
-	userConn            *grpc.ClientConn
+	workspaceUserClient identityv1connect.WorkspaceUserServiceClient
+	tenantUserClient    userv1connect.TenantUserServiceClient
 }
 
 // NewHandler は新しいMeハンドラーを作成する
-func NewHandler(identityAPIURL, userAPIURL string) (*Handler, error) {
-	// Identity APIへのgRPC接続を確立
-	identityConn, err := grpc.NewClient(
-		identityAPIURL,
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-	)
-	if err != nil {
-		return nil, err
-	}
-
-	// User APIへのgRPC接続を確立
-	userConn, err := grpc.NewClient(
-		userAPIURL,
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-	)
-	if err != nil {
-		identityConn.Close()
-		return nil, err
-	}
-
+func NewHandler(identityAPIURL, userAPIURL string) *Handler {
 	return &Handler{
-		workspaceUserClient: identityv1.NewWorkspaceUserServiceClient(identityConn),
-		tenantUserClient:    userv1.NewTenantUserServiceClient(userConn),
-		identityConn:        identityConn,
-		userConn:            userConn,
-	}, nil
-}
-
-// Close はgRPC接続をクローズする
-func (h *Handler) Close() error {
-	if err := h.identityConn.Close(); err != nil {
-		slog.Error("Failed to close identity connection", "error", err)
+		workspaceUserClient: identityv1connect.NewWorkspaceUserServiceClient(
+			http.DefaultClient,
+			identityAPIURL,
+		),
+		tenantUserClient: userv1connect.NewTenantUserServiceClient(
+			http.DefaultClient,
+			userAPIURL,
+		),
 	}
-	if err := h.userConn.Close(); err != nil {
-		slog.Error("Failed to close user connection", "error", err)
-	}
-	return nil
 }
 
 // Ensure Handler implements gatewayv1connect.MeServiceHandler
@@ -78,22 +48,26 @@ func (h *Handler) GetMe(
 	}
 
 	// Identity APIからWorkspaceUser情報を取得
-	identityCtx := metadata.AppendToOutgoingContext(ctx, "x-auth0-user-id", auth0UserID)
-	workspaceUserResp, err := h.workspaceUserClient.GetWorkspaceUser(identityCtx, &identityv1.GetWorkspaceUserRequest{})
+	workspaceUserReq := connect.NewRequest(&identityv1.GetWorkspaceUserRequest{})
+	workspaceUserReq.Header().Set("X-Auth0-User-ID", auth0UserID)
+
+	workspaceUserResp, err := h.workspaceUserClient.GetWorkspaceUser(ctx, workspaceUserReq)
 	if err != nil {
 		return nil, connect.NewError(connect.CodeInternal, err)
 	}
 
 	// User APIからTenantUser情報を取得
-	userCtx := metadata.AppendToOutgoingContext(ctx, "x-workspace-user-id", workspaceUserResp.WorkspaceUserId)
-	tenantUsersResp, err := h.tenantUserClient.GetTenantUsers(userCtx, &userv1.GetTenantUsersRequest{})
+	tenantUsersReq := connect.NewRequest(&userv1.GetTenantUsersRequest{})
+	tenantUsersReq.Header().Set("X-Workspace-User-ID", workspaceUserResp.Msg.WorkspaceUserId)
+
+	tenantUsersResp, err := h.tenantUserClient.GetTenantUsers(ctx, tenantUsersReq)
 	if err != nil {
 		return nil, connect.NewError(connect.CodeInternal, err)
 	}
 
 	// TenantUser情報をTenantUserInfo形式に変換
-	tenantInfos := make([]*gatewayv1.TenantUserInfo, len(tenantUsersResp.Users))
-	for i, tu := range tenantUsersResp.Users {
+	tenantInfos := make([]*gatewayv1.TenantUserInfo, len(tenantUsersResp.Msg.Users))
+	for i, tu := range tenantUsersResp.Msg.Users {
 		tenantInfos[i] = &gatewayv1.TenantUserInfo{
 			TenantId:     tu.TenantId,
 			TenantUserId: tu.TenantUserId,
@@ -103,10 +77,10 @@ func (h *Handler) GetMe(
 
 	// レスポンスを統合
 	return connect.NewResponse(&gatewayv1.GetMeResponse{
-		WorkspaceId:     workspaceUserResp.WorkspaceId,
-		WorkspaceUserId: workspaceUserResp.WorkspaceUserId,
-		Email:           workspaceUserResp.Email,
-		Name:            workspaceUserResp.Name,
+		WorkspaceId:     workspaceUserResp.Msg.WorkspaceId,
+		WorkspaceUserId: workspaceUserResp.Msg.WorkspaceUserId,
+		Email:           workspaceUserResp.Msg.Email,
+		Name:            workspaceUserResp.Msg.Name,
 		Tenants:         tenantInfos,
 	}), nil
 }
