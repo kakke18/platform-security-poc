@@ -6,7 +6,7 @@ import (
 	"net/http/httputil"
 	"net/url"
 
-	"github.com/kakke18/platform-security-poc/backend/gen/gateway/v1/gatewayv1connect"
+	"github.com/kakke18/platform-security-poc/backend/gateway/gen/gateway/v1/gatewayv1connect"
 	"github.com/kakke18/platform-security-poc/backend/gateway/internal/config"
 	"github.com/kakke18/platform-security-poc/backend/gateway/internal/me"
 	"github.com/kakke18/platform-security-poc/backend/gateway/internal/middleware"
@@ -20,18 +20,17 @@ type Server struct {
 }
 
 // New は新しいサーバーを作成する
-// cleanup関数を返すので、呼び出し側でdeferで実行すること
-func New(cfg *config.Config) (*Server, func(), error) {
+func New(cfg *config.Config) (*Server, error) {
 	// JWTミドルウェアを初期化
 	jwtMiddleware, err := middleware.NewJWTMiddleware(cfg.Auth0Domain, cfg.Auth0Audience)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	// Identity APIのURLをパース
 	identityURL, err := url.Parse(cfg.IdentityAPIURL)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	// リバースプロキシを作成
@@ -47,15 +46,7 @@ func New(cfg *config.Config) (*Server, func(), error) {
 	}
 
 	// Me APIハンドラーを初期化
-	meHandler, err := me.NewHandler(cfg.IdentityAPIURL, cfg.UserAPIURL)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	// cleanup関数を定義
-	cleanup := func() {
-		meHandler.Close()
-	}
+	meHandler := me.NewHandler(cfg.IdentityAPIURL, cfg.UserAPIURL)
 
 	// マルチプレクサを作成
 	mux := http.NewServeMux()
@@ -96,7 +87,7 @@ func New(cfg *config.Config) (*Server, func(), error) {
 	return &Server{
 		config:     cfg,
 		httpServer: httpServer,
-	}, cleanup, nil
+	}, nil
 }
 
 // Run はサーバーを起動する
