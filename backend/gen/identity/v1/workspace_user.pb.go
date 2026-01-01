@@ -131,6 +131,180 @@ func (x *GetWorkspaceUserResponse) GetName() string {
 	return ""
 }
 
+// ListWorkspaceUsersRequest は ListWorkspaceUsers のリクエスト
+type ListWorkspaceUsersRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// page_size はページサイズ
+	PageSize int32 `protobuf:"varint,1,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	// page_token はページトークン
+	PageToken     string `protobuf:"bytes,2,opt,name=page_token,json=pageToken,proto3" json:"page_token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListWorkspaceUsersRequest) Reset() {
+	*x = ListWorkspaceUsersRequest{}
+	mi := &file_identity_v1_workspace_user_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListWorkspaceUsersRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListWorkspaceUsersRequest) ProtoMessage() {}
+
+func (x *ListWorkspaceUsersRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_identity_v1_workspace_user_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListWorkspaceUsersRequest.ProtoReflect.Descriptor instead.
+func (*ListWorkspaceUsersRequest) Descriptor() ([]byte, []int) {
+	return file_identity_v1_workspace_user_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *ListWorkspaceUsersRequest) GetPageSize() int32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
+func (x *ListWorkspaceUsersRequest) GetPageToken() string {
+	if x != nil {
+		return x.PageToken
+	}
+	return ""
+}
+
+// WorkspaceUser はワークスペースユーザー情報
+type WorkspaceUser struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// workspace_user_id はワークスペースユーザーID
+	WorkspaceUserId string `protobuf:"bytes,1,opt,name=workspace_user_id,json=workspaceUserId,proto3" json:"workspace_user_id,omitempty"`
+	// email はメールアドレス
+	Email string `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
+	// name は表示名
+	Name          string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *WorkspaceUser) Reset() {
+	*x = WorkspaceUser{}
+	mi := &file_identity_v1_workspace_user_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WorkspaceUser) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WorkspaceUser) ProtoMessage() {}
+
+func (x *WorkspaceUser) ProtoReflect() protoreflect.Message {
+	mi := &file_identity_v1_workspace_user_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WorkspaceUser.ProtoReflect.Descriptor instead.
+func (*WorkspaceUser) Descriptor() ([]byte, []int) {
+	return file_identity_v1_workspace_user_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *WorkspaceUser) GetWorkspaceUserId() string {
+	if x != nil {
+		return x.WorkspaceUserId
+	}
+	return ""
+}
+
+func (x *WorkspaceUser) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+func (x *WorkspaceUser) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+// ListWorkspaceUsersResponse は ListWorkspaceUsers のレスポンス
+type ListWorkspaceUsersResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// users はユーザー情報のリスト
+	Users []*WorkspaceUser `protobuf:"bytes,1,rep,name=users,proto3" json:"users,omitempty"`
+	// next_page_token は次のページトークン
+	NextPageToken string `protobuf:"bytes,2,opt,name=next_page_token,json=nextPageToken,proto3" json:"next_page_token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListWorkspaceUsersResponse) Reset() {
+	*x = ListWorkspaceUsersResponse{}
+	mi := &file_identity_v1_workspace_user_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListWorkspaceUsersResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListWorkspaceUsersResponse) ProtoMessage() {}
+
+func (x *ListWorkspaceUsersResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_identity_v1_workspace_user_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListWorkspaceUsersResponse.ProtoReflect.Descriptor instead.
+func (*ListWorkspaceUsersResponse) Descriptor() ([]byte, []int) {
+	return file_identity_v1_workspace_user_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *ListWorkspaceUsersResponse) GetUsers() []*WorkspaceUser {
+	if x != nil {
+		return x.Users
+	}
+	return nil
+}
+
+func (x *ListWorkspaceUsersResponse) GetNextPageToken() string {
+	if x != nil {
+		return x.NextPageToken
+	}
+	return ""
+}
+
 var File_identity_v1_workspace_user_proto protoreflect.FileDescriptor
 
 const file_identity_v1_workspace_user_proto_rawDesc = "" +
@@ -141,9 +315,21 @@ const file_identity_v1_workspace_user_proto_rawDesc = "" +
 	"\fworkspace_id\x18\x01 \x01(\tR\vworkspaceId\x12*\n" +
 	"\x11workspace_user_id\x18\x02 \x01(\tR\x0fworkspaceUserId\x12\x14\n" +
 	"\x05email\x18\x03 \x01(\tR\x05email\x12\x12\n" +
-	"\x04name\x18\x04 \x01(\tR\x04name2w\n" +
+	"\x04name\x18\x04 \x01(\tR\x04name\"W\n" +
+	"\x19ListWorkspaceUsersRequest\x12\x1b\n" +
+	"\tpage_size\x18\x01 \x01(\x05R\bpageSize\x12\x1d\n" +
+	"\n" +
+	"page_token\x18\x02 \x01(\tR\tpageToken\"e\n" +
+	"\rWorkspaceUser\x12*\n" +
+	"\x11workspace_user_id\x18\x01 \x01(\tR\x0fworkspaceUserId\x12\x14\n" +
+	"\x05email\x18\x02 \x01(\tR\x05email\x12\x12\n" +
+	"\x04name\x18\x03 \x01(\tR\x04name\"v\n" +
+	"\x1aListWorkspaceUsersResponse\x120\n" +
+	"\x05users\x18\x01 \x03(\v2\x1a.identity.v1.WorkspaceUserR\x05users\x12&\n" +
+	"\x0fnext_page_token\x18\x02 \x01(\tR\rnextPageToken2\xde\x01\n" +
 	"\x14WorkspaceUserService\x12_\n" +
-	"\x10GetWorkspaceUser\x12$.identity.v1.GetWorkspaceUserRequest\x1a%.identity.v1.GetWorkspaceUserResponseBMZKgithub.com/kakke18/platform-security-poc/backend/gen/identity/v1;identityv1b\x06proto3"
+	"\x10GetWorkspaceUser\x12$.identity.v1.GetWorkspaceUserRequest\x1a%.identity.v1.GetWorkspaceUserResponse\x12e\n" +
+	"\x12ListWorkspaceUsers\x12&.identity.v1.ListWorkspaceUsersRequest\x1a'.identity.v1.ListWorkspaceUsersResponseBMZKgithub.com/kakke18/platform-security-poc/backend/gen/identity/v1;identityv1b\x06proto3"
 
 var (
 	file_identity_v1_workspace_user_proto_rawDescOnce sync.Once
@@ -157,19 +343,25 @@ func file_identity_v1_workspace_user_proto_rawDescGZIP() []byte {
 	return file_identity_v1_workspace_user_proto_rawDescData
 }
 
-var file_identity_v1_workspace_user_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_identity_v1_workspace_user_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_identity_v1_workspace_user_proto_goTypes = []any{
-	(*GetWorkspaceUserRequest)(nil),  // 0: identity.v1.GetWorkspaceUserRequest
-	(*GetWorkspaceUserResponse)(nil), // 1: identity.v1.GetWorkspaceUserResponse
+	(*GetWorkspaceUserRequest)(nil),    // 0: identity.v1.GetWorkspaceUserRequest
+	(*GetWorkspaceUserResponse)(nil),   // 1: identity.v1.GetWorkspaceUserResponse
+	(*ListWorkspaceUsersRequest)(nil),  // 2: identity.v1.ListWorkspaceUsersRequest
+	(*WorkspaceUser)(nil),              // 3: identity.v1.WorkspaceUser
+	(*ListWorkspaceUsersResponse)(nil), // 4: identity.v1.ListWorkspaceUsersResponse
 }
 var file_identity_v1_workspace_user_proto_depIdxs = []int32{
-	0, // 0: identity.v1.WorkspaceUserService.GetWorkspaceUser:input_type -> identity.v1.GetWorkspaceUserRequest
-	1, // 1: identity.v1.WorkspaceUserService.GetWorkspaceUser:output_type -> identity.v1.GetWorkspaceUserResponse
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	3, // 0: identity.v1.ListWorkspaceUsersResponse.users:type_name -> identity.v1.WorkspaceUser
+	0, // 1: identity.v1.WorkspaceUserService.GetWorkspaceUser:input_type -> identity.v1.GetWorkspaceUserRequest
+	2, // 2: identity.v1.WorkspaceUserService.ListWorkspaceUsers:input_type -> identity.v1.ListWorkspaceUsersRequest
+	1, // 3: identity.v1.WorkspaceUserService.GetWorkspaceUser:output_type -> identity.v1.GetWorkspaceUserResponse
+	4, // 4: identity.v1.WorkspaceUserService.ListWorkspaceUsers:output_type -> identity.v1.ListWorkspaceUsersResponse
+	3, // [3:5] is the sub-list for method output_type
+	1, // [1:3] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_identity_v1_workspace_user_proto_init() }
@@ -183,7 +375,7 @@ func file_identity_v1_workspace_user_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_identity_v1_workspace_user_proto_rawDesc), len(file_identity_v1_workspace_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

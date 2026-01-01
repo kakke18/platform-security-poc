@@ -22,6 +22,9 @@ service MeService {
   // GetMe は現在認証されているユーザーの全情報を取得する
   // Identity API と User Service API を呼び出して統合したレスポンスを返す
   rpc GetMe(GetMeRequest) returns (GetMeResponse);
+
+  // ListWorkspaceUsers はワークスペース内のユーザー一覧を取得する
+  rpc ListWorkspaceUsers(ListWorkspaceUsersRequest) returns (ListWorkspaceUsersResponse);
 }
 
 // GetMeRequest は GetMe のリクエスト
@@ -57,4 +60,34 @@ message GetMeResponse {
 
   // tenants は所属する Tenant の一覧 (from User Service)
   repeated TenantUserInfo tenants = 5;
+}
+
+// ListWorkspaceUsersRequest は ListWorkspaceUsers のリクエスト
+message ListWorkspaceUsersRequest {
+  // page_size はページサイズ
+  int32 page_size = 1;
+
+  // page_token はページトークン
+  string page_token = 2;
+}
+
+// WorkspaceUser はワークスペース内のユーザー情報
+message WorkspaceUser {
+  // workspace_user_id はワークスペースユーザーID
+  string workspace_user_id = 1;
+
+  // email はメールアドレス
+  string email = 2;
+
+  // name は表示名
+  string name = 3;
+}
+
+// ListWorkspaceUsersResponse は ListWorkspaceUsers のレスポンス
+message ListWorkspaceUsersResponse {
+  // users はユーザー情報のリスト
+  repeated WorkspaceUser users = 1;
+
+  // next_page_token は次のページトークン
+  string next_page_token = 2;
 }

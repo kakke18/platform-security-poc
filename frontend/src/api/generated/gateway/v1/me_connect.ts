@@ -3,7 +3,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { GetMeRequest, GetMeResponse } from "./me_pb.js";
+import { GetMeRequest, GetMeResponse, ListWorkspaceUsersRequest, ListWorkspaceUsersResponse } from "./me_pb.js";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -25,6 +25,17 @@ export const MeService = {
       name: "GetMe",
       I: GetMeRequest,
       O: GetMeResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * ListWorkspaceUsers はワークスペース内のユーザー一覧を取得する
+     *
+     * @generated from rpc gateway.v1.MeService.ListWorkspaceUsers
+     */
+    listWorkspaceUsers: {
+      name: "ListWorkspaceUsers",
+      I: ListWorkspaceUsersRequest,
+      O: ListWorkspaceUsersResponse,
       kind: MethodKind.Unary,
     },
   }

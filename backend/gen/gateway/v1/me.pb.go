@@ -261,6 +261,180 @@ func (x *GetMeResponse) GetTenants() []*TenantUserInfo {
 	return nil
 }
 
+// ListWorkspaceUsersRequest は ListWorkspaceUsers のリクエスト
+type ListWorkspaceUsersRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// page_size はページサイズ
+	PageSize int32 `protobuf:"varint,1,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	// page_token はページトークン
+	PageToken     string `protobuf:"bytes,2,opt,name=page_token,json=pageToken,proto3" json:"page_token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListWorkspaceUsersRequest) Reset() {
+	*x = ListWorkspaceUsersRequest{}
+	mi := &file_gateway_v1_me_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListWorkspaceUsersRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListWorkspaceUsersRequest) ProtoMessage() {}
+
+func (x *ListWorkspaceUsersRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_gateway_v1_me_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListWorkspaceUsersRequest.ProtoReflect.Descriptor instead.
+func (*ListWorkspaceUsersRequest) Descriptor() ([]byte, []int) {
+	return file_gateway_v1_me_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *ListWorkspaceUsersRequest) GetPageSize() int32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
+func (x *ListWorkspaceUsersRequest) GetPageToken() string {
+	if x != nil {
+		return x.PageToken
+	}
+	return ""
+}
+
+// WorkspaceUser はワークスペース内のユーザー情報
+type WorkspaceUser struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// workspace_user_id はワークスペースユーザーID
+	WorkspaceUserId string `protobuf:"bytes,1,opt,name=workspace_user_id,json=workspaceUserId,proto3" json:"workspace_user_id,omitempty"`
+	// email はメールアドレス
+	Email string `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
+	// name は表示名
+	Name          string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *WorkspaceUser) Reset() {
+	*x = WorkspaceUser{}
+	mi := &file_gateway_v1_me_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WorkspaceUser) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WorkspaceUser) ProtoMessage() {}
+
+func (x *WorkspaceUser) ProtoReflect() protoreflect.Message {
+	mi := &file_gateway_v1_me_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WorkspaceUser.ProtoReflect.Descriptor instead.
+func (*WorkspaceUser) Descriptor() ([]byte, []int) {
+	return file_gateway_v1_me_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *WorkspaceUser) GetWorkspaceUserId() string {
+	if x != nil {
+		return x.WorkspaceUserId
+	}
+	return ""
+}
+
+func (x *WorkspaceUser) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+func (x *WorkspaceUser) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+// ListWorkspaceUsersResponse は ListWorkspaceUsers のレスポンス
+type ListWorkspaceUsersResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// users はユーザー情報のリスト
+	Users []*WorkspaceUser `protobuf:"bytes,1,rep,name=users,proto3" json:"users,omitempty"`
+	// next_page_token は次のページトークン
+	NextPageToken string `protobuf:"bytes,2,opt,name=next_page_token,json=nextPageToken,proto3" json:"next_page_token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListWorkspaceUsersResponse) Reset() {
+	*x = ListWorkspaceUsersResponse{}
+	mi := &file_gateway_v1_me_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListWorkspaceUsersResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListWorkspaceUsersResponse) ProtoMessage() {}
+
+func (x *ListWorkspaceUsersResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_gateway_v1_me_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListWorkspaceUsersResponse.ProtoReflect.Descriptor instead.
+func (*ListWorkspaceUsersResponse) Descriptor() ([]byte, []int) {
+	return file_gateway_v1_me_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *ListWorkspaceUsersResponse) GetUsers() []*WorkspaceUser {
+	if x != nil {
+		return x.Users
+	}
+	return nil
+}
+
+func (x *ListWorkspaceUsersResponse) GetNextPageToken() string {
+	if x != nil {
+		return x.NextPageToken
+	}
+	return ""
+}
+
 var File_gateway_v1_me_proto protoreflect.FileDescriptor
 
 const file_gateway_v1_me_proto_rawDesc = "" +
@@ -277,15 +451,27 @@ const file_gateway_v1_me_proto_rawDesc = "" +
 	"\x11workspace_user_id\x18\x02 \x01(\tR\x0fworkspaceUserId\x12\x14\n" +
 	"\x05email\x18\x03 \x01(\tR\x05email\x12\x12\n" +
 	"\x04name\x18\x04 \x01(\tR\x04name\x124\n" +
-	"\atenants\x18\x05 \x03(\v2\x1a.gateway.v1.TenantUserInfoR\atenants*N\n" +
+	"\atenants\x18\x05 \x03(\v2\x1a.gateway.v1.TenantUserInfoR\atenants\"W\n" +
+	"\x19ListWorkspaceUsersRequest\x12\x1b\n" +
+	"\tpage_size\x18\x01 \x01(\x05R\bpageSize\x12\x1d\n" +
+	"\n" +
+	"page_token\x18\x02 \x01(\tR\tpageToken\"e\n" +
+	"\rWorkspaceUser\x12*\n" +
+	"\x11workspace_user_id\x18\x01 \x01(\tR\x0fworkspaceUserId\x12\x14\n" +
+	"\x05email\x18\x02 \x01(\tR\x05email\x12\x12\n" +
+	"\x04name\x18\x03 \x01(\tR\x04name\"u\n" +
+	"\x1aListWorkspaceUsersResponse\x12/\n" +
+	"\x05users\x18\x01 \x03(\v2\x19.gateway.v1.WorkspaceUserR\x05users\x12&\n" +
+	"\x0fnext_page_token\x18\x02 \x01(\tR\rnextPageToken*N\n" +
 	"\x04Role\x12\x14\n" +
 	"\x10ROLE_UNSPECIFIED\x10\x00\x12\x0e\n" +
 	"\n" +
 	"ROLE_ADMIN\x10\x01\x12\x0f\n" +
 	"\vROLE_MEMBER\x10\x02\x12\x0f\n" +
-	"\vROLE_VIEWER\x10\x032I\n" +
+	"\vROLE_VIEWER\x10\x032\xae\x01\n" +
 	"\tMeService\x12<\n" +
-	"\x05GetMe\x12\x18.gateway.v1.GetMeRequest\x1a\x19.gateway.v1.GetMeResponseBKZIgithub.com/kakke18/platform-security-poc/backend/gen/gateway/v1;gatewayv1b\x06proto3"
+	"\x05GetMe\x12\x18.gateway.v1.GetMeRequest\x1a\x19.gateway.v1.GetMeResponse\x12c\n" +
+	"\x12ListWorkspaceUsers\x12%.gateway.v1.ListWorkspaceUsersRequest\x1a&.gateway.v1.ListWorkspaceUsersResponseBKZIgithub.com/kakke18/platform-security-poc/backend/gen/gateway/v1;gatewayv1b\x06proto3"
 
 var (
 	file_gateway_v1_me_proto_rawDescOnce sync.Once
@@ -300,23 +486,29 @@ func file_gateway_v1_me_proto_rawDescGZIP() []byte {
 }
 
 var file_gateway_v1_me_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_gateway_v1_me_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_gateway_v1_me_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_gateway_v1_me_proto_goTypes = []any{
-	(Role)(0),              // 0: gateway.v1.Role
-	(*GetMeRequest)(nil),   // 1: gateway.v1.GetMeRequest
-	(*TenantUserInfo)(nil), // 2: gateway.v1.TenantUserInfo
-	(*GetMeResponse)(nil),  // 3: gateway.v1.GetMeResponse
+	(Role)(0),                          // 0: gateway.v1.Role
+	(*GetMeRequest)(nil),               // 1: gateway.v1.GetMeRequest
+	(*TenantUserInfo)(nil),             // 2: gateway.v1.TenantUserInfo
+	(*GetMeResponse)(nil),              // 3: gateway.v1.GetMeResponse
+	(*ListWorkspaceUsersRequest)(nil),  // 4: gateway.v1.ListWorkspaceUsersRequest
+	(*WorkspaceUser)(nil),              // 5: gateway.v1.WorkspaceUser
+	(*ListWorkspaceUsersResponse)(nil), // 6: gateway.v1.ListWorkspaceUsersResponse
 }
 var file_gateway_v1_me_proto_depIdxs = []int32{
 	0, // 0: gateway.v1.TenantUserInfo.role:type_name -> gateway.v1.Role
 	2, // 1: gateway.v1.GetMeResponse.tenants:type_name -> gateway.v1.TenantUserInfo
-	1, // 2: gateway.v1.MeService.GetMe:input_type -> gateway.v1.GetMeRequest
-	3, // 3: gateway.v1.MeService.GetMe:output_type -> gateway.v1.GetMeResponse
-	3, // [3:4] is the sub-list for method output_type
-	2, // [2:3] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	5, // 2: gateway.v1.ListWorkspaceUsersResponse.users:type_name -> gateway.v1.WorkspaceUser
+	1, // 3: gateway.v1.MeService.GetMe:input_type -> gateway.v1.GetMeRequest
+	4, // 4: gateway.v1.MeService.ListWorkspaceUsers:input_type -> gateway.v1.ListWorkspaceUsersRequest
+	3, // 5: gateway.v1.MeService.GetMe:output_type -> gateway.v1.GetMeResponse
+	6, // 6: gateway.v1.MeService.ListWorkspaceUsers:output_type -> gateway.v1.ListWorkspaceUsersResponse
+	5, // [5:7] is the sub-list for method output_type
+	3, // [3:5] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_gateway_v1_me_proto_init() }
@@ -330,7 +522,7 @@ func file_gateway_v1_me_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_gateway_v1_me_proto_rawDesc), len(file_gateway_v1_me_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   3,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

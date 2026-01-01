@@ -1,8 +1,9 @@
 import { useAuth } from '~/features/auth';
 import { UserInfo, useUser } from '~/features/user';
+import { Layout } from '~/components/Layout';
 
-export function DashboardPage() {
-  const { user: auth0User, loading: authLoading, error: authError } = useAuth();
+export function MePage() {
+  const { user: auth0User, loading: authLoading } = useAuth();
   const { user, loading: userLoading, error: userError, accessToken } = useUser();
 
   if (authLoading) {
@@ -18,18 +19,10 @@ export function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-4xl mx-auto">
+    <Layout>
+      <div className="max-w-4xl">
         <div className="bg-white rounded-lg shadow-md p-8">
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-            <a
-              href="/auth/logout"
-              className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600"
-            >
-              Logout
-            </a>
-          </div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-6">My Profile</h1>
 
           <div className="space-y-6">
             {userLoading && (
@@ -40,15 +33,15 @@ export function DashboardPage() {
 
             {user && <UserInfo user={user} accessToken={accessToken} />}
 
-            {(authError || userError) && (
+            {userError && (
               <div className="bg-red-50 border-l-4 border-red-400 p-4">
                 <p className="font-semibold text-red-800">Error</p>
-                <p className="text-sm text-red-700 mt-1">{authError || userError}</p>
+                <p className="text-sm text-red-700 mt-1">{userError}</p>
               </div>
             )}
           </div>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 }

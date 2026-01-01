@@ -103,6 +103,45 @@ func (h *Handler) GetMe(
 	}), nil
 }
 
+// ListWorkspaceUsers はワークスペース内のユーザー一覧を取得する
+func (h *Handler) ListWorkspaceUsers(
+	ctx context.Context,
+	req *connect.Request[gatewayv1.ListWorkspaceUsersRequest],
+) (*connect.Response[gatewayv1.ListWorkspaceUsersResponse], error) {
+	// JWTミドルウェアで設定されたAuth0ユーザーIDを取得
+	auth0UserID := req.Header().Get("X-Auth0-User-ID")
+	if auth0UserID == "" {
+		return nil, connect.NewError(connect.CodeUnauthenticated, nil)
+	}
+
+	// Identity APIからワークスペース内のユーザー一覧を取得
+	listReq := connect.NewRequest(&identityv1.ListWorkspaceUsersRequest{
+		PageSize:  req.Msg.PageSize,
+		PageToken: req.Msg.PageToken,
+	})
+	listReq.Header().Set("X-Auth0-User-ID", auth0UserID)
+
+	listResp, err := h.workspaceUserClient.ListWorkspaceUsers(ctx, listReq)
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInternal, err)
+	}
+
+	// Identity APIのWorkspaceUserをGatewayのWorkspaceUserに変換
+	users := make([]*gatewayv1.WorkspaceUser, len(listResp.Msg.Users))
+	for i, u := range listResp.Msg.Users {
+		users[i] = &gatewayv1.WorkspaceUser{
+			WorkspaceUserId: u.WorkspaceUserId,
+			Email:           u.Email,
+			Name:            u.Name,
+		}
+	}
+
+	return connect.NewResponse(&gatewayv1.ListWorkspaceUsersResponse{
+		Users:         users,
+		NextPageToken: listResp.Msg.NextPageToken,
+	}), nil
+}
+
 // convertRole はUser ServiceのRoleをGatewayのRoleに変換する
 func convertRole(role userv1.Role) gatewayv1.Role {
 	switch role {

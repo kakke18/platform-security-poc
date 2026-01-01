@@ -36,6 +36,9 @@ const (
 	// WorkspaceUserServiceGetWorkspaceUserProcedure is the fully-qualified name of the
 	// WorkspaceUserService's GetWorkspaceUser RPC.
 	WorkspaceUserServiceGetWorkspaceUserProcedure = "/identity.v1.WorkspaceUserService/GetWorkspaceUser"
+	// WorkspaceUserServiceListWorkspaceUsersProcedure is the fully-qualified name of the
+	// WorkspaceUserService's ListWorkspaceUsers RPC.
+	WorkspaceUserServiceListWorkspaceUsersProcedure = "/identity.v1.WorkspaceUserService/ListWorkspaceUsers"
 )
 
 // WorkspaceUserServiceClient is a client for the identity.v1.WorkspaceUserService service.
@@ -43,6 +46,8 @@ type WorkspaceUserServiceClient interface {
 	// GetWorkspaceUser は現在認証されているユーザーの Workspace User 情報を取得する
 	// X-Auth0-User-ID ヘッダーから Auth0 User ID を取得して、対応する Workspace User を返す
 	GetWorkspaceUser(context.Context, *connect.Request[v1.GetWorkspaceUserRequest]) (*connect.Response[v1.GetWorkspaceUserResponse], error)
+	// ListWorkspaceUsers はワークスペース内のユーザー一覧を取得する
+	ListWorkspaceUsers(context.Context, *connect.Request[v1.ListWorkspaceUsersRequest]) (*connect.Response[v1.ListWorkspaceUsersResponse], error)
 }
 
 // NewWorkspaceUserServiceClient constructs a client for the identity.v1.WorkspaceUserService
@@ -62,12 +67,19 @@ func NewWorkspaceUserServiceClient(httpClient connect.HTTPClient, baseURL string
 			connect.WithSchema(workspaceUserServiceMethods.ByName("GetWorkspaceUser")),
 			connect.WithClientOptions(opts...),
 		),
+		listWorkspaceUsers: connect.NewClient[v1.ListWorkspaceUsersRequest, v1.ListWorkspaceUsersResponse](
+			httpClient,
+			baseURL+WorkspaceUserServiceListWorkspaceUsersProcedure,
+			connect.WithSchema(workspaceUserServiceMethods.ByName("ListWorkspaceUsers")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
 // workspaceUserServiceClient implements WorkspaceUserServiceClient.
 type workspaceUserServiceClient struct {
-	getWorkspaceUser *connect.Client[v1.GetWorkspaceUserRequest, v1.GetWorkspaceUserResponse]
+	getWorkspaceUser   *connect.Client[v1.GetWorkspaceUserRequest, v1.GetWorkspaceUserResponse]
+	listWorkspaceUsers *connect.Client[v1.ListWorkspaceUsersRequest, v1.ListWorkspaceUsersResponse]
 }
 
 // GetWorkspaceUser calls identity.v1.WorkspaceUserService.GetWorkspaceUser.
@@ -75,11 +87,18 @@ func (c *workspaceUserServiceClient) GetWorkspaceUser(ctx context.Context, req *
 	return c.getWorkspaceUser.CallUnary(ctx, req)
 }
 
+// ListWorkspaceUsers calls identity.v1.WorkspaceUserService.ListWorkspaceUsers.
+func (c *workspaceUserServiceClient) ListWorkspaceUsers(ctx context.Context, req *connect.Request[v1.ListWorkspaceUsersRequest]) (*connect.Response[v1.ListWorkspaceUsersResponse], error) {
+	return c.listWorkspaceUsers.CallUnary(ctx, req)
+}
+
 // WorkspaceUserServiceHandler is an implementation of the identity.v1.WorkspaceUserService service.
 type WorkspaceUserServiceHandler interface {
 	// GetWorkspaceUser は現在認証されているユーザーの Workspace User 情報を取得する
 	// X-Auth0-User-ID ヘッダーから Auth0 User ID を取得して、対応する Workspace User を返す
 	GetWorkspaceUser(context.Context, *connect.Request[v1.GetWorkspaceUserRequest]) (*connect.Response[v1.GetWorkspaceUserResponse], error)
+	// ListWorkspaceUsers はワークスペース内のユーザー一覧を取得する
+	ListWorkspaceUsers(context.Context, *connect.Request[v1.ListWorkspaceUsersRequest]) (*connect.Response[v1.ListWorkspaceUsersResponse], error)
 }
 
 // NewWorkspaceUserServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -95,10 +114,18 @@ func NewWorkspaceUserServiceHandler(svc WorkspaceUserServiceHandler, opts ...con
 		connect.WithSchema(workspaceUserServiceMethods.ByName("GetWorkspaceUser")),
 		connect.WithHandlerOptions(opts...),
 	)
+	workspaceUserServiceListWorkspaceUsersHandler := connect.NewUnaryHandler(
+		WorkspaceUserServiceListWorkspaceUsersProcedure,
+		svc.ListWorkspaceUsers,
+		connect.WithSchema(workspaceUserServiceMethods.ByName("ListWorkspaceUsers")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/identity.v1.WorkspaceUserService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case WorkspaceUserServiceGetWorkspaceUserProcedure:
 			workspaceUserServiceGetWorkspaceUserHandler.ServeHTTP(w, r)
+		case WorkspaceUserServiceListWorkspaceUsersProcedure:
+			workspaceUserServiceListWorkspaceUsersHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -110,4 +137,8 @@ type UnimplementedWorkspaceUserServiceHandler struct{}
 
 func (UnimplementedWorkspaceUserServiceHandler) GetWorkspaceUser(context.Context, *connect.Request[v1.GetWorkspaceUserRequest]) (*connect.Response[v1.GetWorkspaceUserResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("identity.v1.WorkspaceUserService.GetWorkspaceUser is not implemented"))
+}
+
+func (UnimplementedWorkspaceUserServiceHandler) ListWorkspaceUsers(context.Context, *connect.Request[v1.ListWorkspaceUsersRequest]) (*connect.Response[v1.ListWorkspaceUsersResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("identity.v1.WorkspaceUserService.ListWorkspaceUsers is not implemented"))
 }
