@@ -3,7 +3,7 @@ import { UserInfo, useUser } from '~/features/user';
 
 export function DashboardPage() {
   const { user: auth0User, loading: authLoading, error: authError } = useAuth();
-  const { user, loading: userLoading, error: userError } = useUser();
+  const { user, loading: userLoading, error: userError, accessToken } = useUser();
 
   if (authLoading) {
     return (
@@ -38,7 +38,7 @@ export function DashboardPage() {
               </div>
             )}
 
-            {user && <UserInfo user={user} />}
+            {user && <UserInfo user={user} accessToken={accessToken} />}
 
             {(authError || userError) && (
               <div className="bg-red-50 border-l-4 border-red-400 p-4">
