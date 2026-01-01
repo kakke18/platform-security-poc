@@ -19,7 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	MeService_GetMe_FullMethodName = "/gateway.v1.MeService/GetMe"
+	MeService_GetMe_FullMethodName              = "/gateway.v1.MeService/GetMe"
+	MeService_ListWorkspaceUsers_FullMethodName = "/gateway.v1.MeService/ListWorkspaceUsers"
 )
 
 // MeServiceClient is the client API for MeService service.
@@ -32,6 +33,8 @@ type MeServiceClient interface {
 	// GetMe は現在認証されているユーザーの全情報を取得する
 	// Identity API と User Service API を呼び出して統合したレスポンスを返す
 	GetMe(ctx context.Context, in *GetMeRequest, opts ...grpc.CallOption) (*GetMeResponse, error)
+	// ListWorkspaceUsers はワークスペース内のユーザー一覧を取得する
+	ListWorkspaceUsers(ctx context.Context, in *ListWorkspaceUsersRequest, opts ...grpc.CallOption) (*ListWorkspaceUsersResponse, error)
 }
 
 type meServiceClient struct {
@@ -52,6 +55,16 @@ func (c *meServiceClient) GetMe(ctx context.Context, in *GetMeRequest, opts ...g
 	return out, nil
 }
 
+func (c *meServiceClient) ListWorkspaceUsers(ctx context.Context, in *ListWorkspaceUsersRequest, opts ...grpc.CallOption) (*ListWorkspaceUsersResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListWorkspaceUsersResponse)
+	err := c.cc.Invoke(ctx, MeService_ListWorkspaceUsers_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MeServiceServer is the server API for MeService service.
 // All implementations must embed UnimplementedMeServiceServer
 // for forward compatibility.
@@ -62,6 +75,8 @@ type MeServiceServer interface {
 	// GetMe は現在認証されているユーザーの全情報を取得する
 	// Identity API と User Service API を呼び出して統合したレスポンスを返す
 	GetMe(context.Context, *GetMeRequest) (*GetMeResponse, error)
+	// ListWorkspaceUsers はワークスペース内のユーザー一覧を取得する
+	ListWorkspaceUsers(context.Context, *ListWorkspaceUsersRequest) (*ListWorkspaceUsersResponse, error)
 	mustEmbedUnimplementedMeServiceServer()
 }
 
@@ -74,6 +89,9 @@ type UnimplementedMeServiceServer struct{}
 
 func (UnimplementedMeServiceServer) GetMe(context.Context, *GetMeRequest) (*GetMeResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetMe not implemented")
+}
+func (UnimplementedMeServiceServer) ListWorkspaceUsers(context.Context, *ListWorkspaceUsersRequest) (*ListWorkspaceUsersResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListWorkspaceUsers not implemented")
 }
 func (UnimplementedMeServiceServer) mustEmbedUnimplementedMeServiceServer() {}
 func (UnimplementedMeServiceServer) testEmbeddedByValue()                   {}
@@ -114,6 +132,24 @@ func _MeService_GetMe_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MeService_ListWorkspaceUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListWorkspaceUsersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MeServiceServer).ListWorkspaceUsers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MeService_ListWorkspaceUsers_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MeServiceServer).ListWorkspaceUsers(ctx, req.(*ListWorkspaceUsersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MeService_ServiceDesc is the grpc.ServiceDesc for MeService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -124,6 +160,10 @@ var MeService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetMe",
 			Handler:    _MeService_GetMe_Handler,
+		},
+		{
+			MethodName: "ListWorkspaceUsers",
+			Handler:    _MeService_ListWorkspaceUsers_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

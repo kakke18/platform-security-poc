@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file identity/v1/workspace_user.proto.
  */
 export const file_identity_v1_workspace_user: GenFile = /*@__PURE__*/
-  fileDesc("CiBpZGVudGl0eS92MS93b3Jrc3BhY2VfdXNlci5wcm90bxILaWRlbnRpdHkudjEiGQoXR2V0V29ya3NwYWNlVXNlclJlcXVlc3QiaAoYR2V0V29ya3NwYWNlVXNlclJlc3BvbnNlEhQKDHdvcmtzcGFjZV9pZBgBIAEoCRIZChF3b3Jrc3BhY2VfdXNlcl9pZBgCIAEoCRINCgVlbWFpbBgDIAEoCRIMCgRuYW1lGAQgASgJMncKFFdvcmtzcGFjZVVzZXJTZXJ2aWNlEl8KEEdldFdvcmtzcGFjZVVzZXISJC5pZGVudGl0eS52MS5HZXRXb3Jrc3BhY2VVc2VyUmVxdWVzdBolLmlkZW50aXR5LnYxLkdldFdvcmtzcGFjZVVzZXJSZXNwb25zZUJNWktnaXRodWIuY29tL2tha2tlMTgvcGxhdGZvcm0tc2VjdXJpdHktcG9jL2JhY2tlbmQvZ2VuL2lkZW50aXR5L3YxO2lkZW50aXR5djFiBnByb3RvMw");
+  fileDesc("CiBpZGVudGl0eS92MS93b3Jrc3BhY2VfdXNlci5wcm90bxILaWRlbnRpdHkudjEiGQoXR2V0V29ya3NwYWNlVXNlclJlcXVlc3QiaAoYR2V0V29ya3NwYWNlVXNlclJlc3BvbnNlEhQKDHdvcmtzcGFjZV9pZBgBIAEoCRIZChF3b3Jrc3BhY2VfdXNlcl9pZBgCIAEoCRINCgVlbWFpbBgDIAEoCRIMCgRuYW1lGAQgASgJIkIKGUxpc3RXb3Jrc3BhY2VVc2Vyc1JlcXVlc3QSEQoJcGFnZV9zaXplGAEgASgFEhIKCnBhZ2VfdG9rZW4YAiABKAkiRwoNV29ya3NwYWNlVXNlchIZChF3b3Jrc3BhY2VfdXNlcl9pZBgBIAEoCRINCgVlbWFpbBgCIAEoCRIMCgRuYW1lGAMgASgJImAKGkxpc3RXb3Jrc3BhY2VVc2Vyc1Jlc3BvbnNlEikKBXVzZXJzGAEgAygLMhouaWRlbnRpdHkudjEuV29ya3NwYWNlVXNlchIXCg9uZXh0X3BhZ2VfdG9rZW4YAiABKAky3gEKFFdvcmtzcGFjZVVzZXJTZXJ2aWNlEl8KEEdldFdvcmtzcGFjZVVzZXISJC5pZGVudGl0eS52MS5HZXRXb3Jrc3BhY2VVc2VyUmVxdWVzdBolLmlkZW50aXR5LnYxLkdldFdvcmtzcGFjZVVzZXJSZXNwb25zZRJlChJMaXN0V29ya3NwYWNlVXNlcnMSJi5pZGVudGl0eS52MS5MaXN0V29ya3NwYWNlVXNlcnNSZXF1ZXN0GicuaWRlbnRpdHkudjEuTGlzdFdvcmtzcGFjZVVzZXJzUmVzcG9uc2VCTVpLZ2l0aHViLmNvbS9rYWtrZTE4L3BsYXRmb3JtLXNlY3VyaXR5LXBvYy9iYWNrZW5kL2dlbi9pZGVudGl0eS92MTtpZGVudGl0eXYxYgZwcm90bzM");
 
 /**
  * GetWorkspaceUserRequest は GetWorkspaceUser のリクエスト
@@ -72,6 +72,97 @@ export const GetWorkspaceUserResponseSchema: GenMessage<GetWorkspaceUserResponse
   messageDesc(file_identity_v1_workspace_user, 1);
 
 /**
+ * ListWorkspaceUsersRequest は ListWorkspaceUsers のリクエスト
+ *
+ * @generated from message identity.v1.ListWorkspaceUsersRequest
+ */
+export type ListWorkspaceUsersRequest = Message<"identity.v1.ListWorkspaceUsersRequest"> & {
+  /**
+   * page_size はページサイズ
+   *
+   * @generated from field: int32 page_size = 1;
+   */
+  pageSize: number;
+
+  /**
+   * page_token はページトークン
+   *
+   * @generated from field: string page_token = 2;
+   */
+  pageToken: string;
+};
+
+/**
+ * Describes the message identity.v1.ListWorkspaceUsersRequest.
+ * Use `create(ListWorkspaceUsersRequestSchema)` to create a new message.
+ */
+export const ListWorkspaceUsersRequestSchema: GenMessage<ListWorkspaceUsersRequest> = /*@__PURE__*/
+  messageDesc(file_identity_v1_workspace_user, 2);
+
+/**
+ * WorkspaceUser はワークスペースユーザー情報
+ *
+ * @generated from message identity.v1.WorkspaceUser
+ */
+export type WorkspaceUser = Message<"identity.v1.WorkspaceUser"> & {
+  /**
+   * workspace_user_id はワークスペースユーザーID
+   *
+   * @generated from field: string workspace_user_id = 1;
+   */
+  workspaceUserId: string;
+
+  /**
+   * email はメールアドレス
+   *
+   * @generated from field: string email = 2;
+   */
+  email: string;
+
+  /**
+   * name は表示名
+   *
+   * @generated from field: string name = 3;
+   */
+  name: string;
+};
+
+/**
+ * Describes the message identity.v1.WorkspaceUser.
+ * Use `create(WorkspaceUserSchema)` to create a new message.
+ */
+export const WorkspaceUserSchema: GenMessage<WorkspaceUser> = /*@__PURE__*/
+  messageDesc(file_identity_v1_workspace_user, 3);
+
+/**
+ * ListWorkspaceUsersResponse は ListWorkspaceUsers のレスポンス
+ *
+ * @generated from message identity.v1.ListWorkspaceUsersResponse
+ */
+export type ListWorkspaceUsersResponse = Message<"identity.v1.ListWorkspaceUsersResponse"> & {
+  /**
+   * users はユーザー情報のリスト
+   *
+   * @generated from field: repeated identity.v1.WorkspaceUser users = 1;
+   */
+  users: WorkspaceUser[];
+
+  /**
+   * next_page_token は次のページトークン
+   *
+   * @generated from field: string next_page_token = 2;
+   */
+  nextPageToken: string;
+};
+
+/**
+ * Describes the message identity.v1.ListWorkspaceUsersResponse.
+ * Use `create(ListWorkspaceUsersResponseSchema)` to create a new message.
+ */
+export const ListWorkspaceUsersResponseSchema: GenMessage<ListWorkspaceUsersResponse> = /*@__PURE__*/
+  messageDesc(file_identity_v1_workspace_user, 4);
+
+/**
  * WorkspaceUserService は Workspace User の管理を担当するサービス
  *
  * @generated from service identity.v1.WorkspaceUserService
@@ -87,6 +178,16 @@ export const WorkspaceUserService: GenService<{
     methodKind: "unary";
     input: typeof GetWorkspaceUserRequestSchema;
     output: typeof GetWorkspaceUserResponseSchema;
+  },
+  /**
+   * ListWorkspaceUsers はワークスペース内のユーザー一覧を取得する
+   *
+   * @generated from rpc identity.v1.WorkspaceUserService.ListWorkspaceUsers
+   */
+  listWorkspaceUsers: {
+    methodKind: "unary";
+    input: typeof ListWorkspaceUsersRequestSchema;
+    output: typeof ListWorkspaceUsersResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_identity_v1_workspace_user, 0);

@@ -3,7 +3,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { GetWorkspaceUserRequest, GetWorkspaceUserResponse } from "./workspace_user_pb.js";
+import { GetWorkspaceUserRequest, GetWorkspaceUserResponse, ListWorkspaceUsersRequest, ListWorkspaceUsersResponse } from "./workspace_user_pb.js";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -24,6 +24,17 @@ export const WorkspaceUserService = {
       name: "GetWorkspaceUser",
       I: GetWorkspaceUserRequest,
       O: GetWorkspaceUserResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * ListWorkspaceUsers はワークスペース内のユーザー一覧を取得する
+     *
+     * @generated from rpc identity.v1.WorkspaceUserService.ListWorkspaceUsers
+     */
+    listWorkspaceUsers: {
+      name: "ListWorkspaceUsers",
+      I: ListWorkspaceUsersRequest,
+      O: ListWorkspaceUsersResponse,
       kind: MethodKind.Unary,
     },
   }

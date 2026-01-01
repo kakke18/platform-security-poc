@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file gateway/v1/me.proto.
  */
 export const file_gateway_v1_me: GenFile = /*@__PURE__*/
-  fileDesc("ChNnYXRld2F5L3YxL21lLnByb3RvEgpnYXRld2F5LnYxIg4KDEdldE1lUmVxdWVzdCJbCg5UZW5hbnRVc2VySW5mbxIRCgl0ZW5hbnRfaWQYASABKAkSFgoOdGVuYW50X3VzZXJfaWQYAiABKAkSHgoEcm9sZRgDIAEoDjIQLmdhdGV3YXkudjEuUm9sZSKKAQoNR2V0TWVSZXNwb25zZRIUCgx3b3Jrc3BhY2VfaWQYASABKAkSGQoRd29ya3NwYWNlX3VzZXJfaWQYAiABKAkSDQoFZW1haWwYAyABKAkSDAoEbmFtZRgEIAEoCRIrCgd0ZW5hbnRzGAUgAygLMhouZ2F0ZXdheS52MS5UZW5hbnRVc2VySW5mbypOCgRSb2xlEhQKEFJPTEVfVU5TUEVDSUZJRUQQABIOCgpST0xFX0FETUlOEAESDwoLUk9MRV9NRU1CRVIQAhIPCgtST0xFX1ZJRVdFUhADMkkKCU1lU2VydmljZRI8CgVHZXRNZRIYLmdhdGV3YXkudjEuR2V0TWVSZXF1ZXN0GhkuZ2F0ZXdheS52MS5HZXRNZVJlc3BvbnNlQktaSWdpdGh1Yi5jb20va2Fra2UxOC9wbGF0Zm9ybS1zZWN1cml0eS1wb2MvYmFja2VuZC9nZW4vZ2F0ZXdheS92MTtnYXRld2F5djFiBnByb3RvMw");
+  fileDesc("ChNnYXRld2F5L3YxL21lLnByb3RvEgpnYXRld2F5LnYxIg4KDEdldE1lUmVxdWVzdCJbCg5UZW5hbnRVc2VySW5mbxIRCgl0ZW5hbnRfaWQYASABKAkSFgoOdGVuYW50X3VzZXJfaWQYAiABKAkSHgoEcm9sZRgDIAEoDjIQLmdhdGV3YXkudjEuUm9sZSKKAQoNR2V0TWVSZXNwb25zZRIUCgx3b3Jrc3BhY2VfaWQYASABKAkSGQoRd29ya3NwYWNlX3VzZXJfaWQYAiABKAkSDQoFZW1haWwYAyABKAkSDAoEbmFtZRgEIAEoCRIrCgd0ZW5hbnRzGAUgAygLMhouZ2F0ZXdheS52MS5UZW5hbnRVc2VySW5mbyJCChlMaXN0V29ya3NwYWNlVXNlcnNSZXF1ZXN0EhEKCXBhZ2Vfc2l6ZRgBIAEoBRISCgpwYWdlX3Rva2VuGAIgASgJIkcKDVdvcmtzcGFjZVVzZXISGQoRd29ya3NwYWNlX3VzZXJfaWQYASABKAkSDQoFZW1haWwYAiABKAkSDAoEbmFtZRgDIAEoCSJfChpMaXN0V29ya3NwYWNlVXNlcnNSZXNwb25zZRIoCgV1c2VycxgBIAMoCzIZLmdhdGV3YXkudjEuV29ya3NwYWNlVXNlchIXCg9uZXh0X3BhZ2VfdG9rZW4YAiABKAkqTgoEUm9sZRIUChBST0xFX1VOU1BFQ0lGSUVEEAASDgoKUk9MRV9BRE1JThABEg8KC1JPTEVfTUVNQkVSEAISDwoLUk9MRV9WSUVXRVIQAzKuAQoJTWVTZXJ2aWNlEjwKBUdldE1lEhguZ2F0ZXdheS52MS5HZXRNZVJlcXVlc3QaGS5nYXRld2F5LnYxLkdldE1lUmVzcG9uc2USYwoSTGlzdFdvcmtzcGFjZVVzZXJzEiUuZ2F0ZXdheS52MS5MaXN0V29ya3NwYWNlVXNlcnNSZXF1ZXN0GiYuZ2F0ZXdheS52MS5MaXN0V29ya3NwYWNlVXNlcnNSZXNwb25zZUJLWklnaXRodWIuY29tL2tha2tlMTgvcGxhdGZvcm0tc2VjdXJpdHktcG9jL2JhY2tlbmQvZ2VuL2dhdGV3YXkvdjE7Z2F0ZXdheXYxYgZwcm90bzM");
 
 /**
  * GetMeRequest は GetMe のリクエスト
@@ -114,6 +114,97 @@ export const GetMeResponseSchema: GenMessage<GetMeResponse> = /*@__PURE__*/
   messageDesc(file_gateway_v1_me, 2);
 
 /**
+ * ListWorkspaceUsersRequest は ListWorkspaceUsers のリクエスト
+ *
+ * @generated from message gateway.v1.ListWorkspaceUsersRequest
+ */
+export type ListWorkspaceUsersRequest = Message<"gateway.v1.ListWorkspaceUsersRequest"> & {
+  /**
+   * page_size はページサイズ
+   *
+   * @generated from field: int32 page_size = 1;
+   */
+  pageSize: number;
+
+  /**
+   * page_token はページトークン
+   *
+   * @generated from field: string page_token = 2;
+   */
+  pageToken: string;
+};
+
+/**
+ * Describes the message gateway.v1.ListWorkspaceUsersRequest.
+ * Use `create(ListWorkspaceUsersRequestSchema)` to create a new message.
+ */
+export const ListWorkspaceUsersRequestSchema: GenMessage<ListWorkspaceUsersRequest> = /*@__PURE__*/
+  messageDesc(file_gateway_v1_me, 3);
+
+/**
+ * WorkspaceUser はワークスペース内のユーザー情報
+ *
+ * @generated from message gateway.v1.WorkspaceUser
+ */
+export type WorkspaceUser = Message<"gateway.v1.WorkspaceUser"> & {
+  /**
+   * workspace_user_id はワークスペースユーザーID
+   *
+   * @generated from field: string workspace_user_id = 1;
+   */
+  workspaceUserId: string;
+
+  /**
+   * email はメールアドレス
+   *
+   * @generated from field: string email = 2;
+   */
+  email: string;
+
+  /**
+   * name は表示名
+   *
+   * @generated from field: string name = 3;
+   */
+  name: string;
+};
+
+/**
+ * Describes the message gateway.v1.WorkspaceUser.
+ * Use `create(WorkspaceUserSchema)` to create a new message.
+ */
+export const WorkspaceUserSchema: GenMessage<WorkspaceUser> = /*@__PURE__*/
+  messageDesc(file_gateway_v1_me, 4);
+
+/**
+ * ListWorkspaceUsersResponse は ListWorkspaceUsers のレスポンス
+ *
+ * @generated from message gateway.v1.ListWorkspaceUsersResponse
+ */
+export type ListWorkspaceUsersResponse = Message<"gateway.v1.ListWorkspaceUsersResponse"> & {
+  /**
+   * users はユーザー情報のリスト
+   *
+   * @generated from field: repeated gateway.v1.WorkspaceUser users = 1;
+   */
+  users: WorkspaceUser[];
+
+  /**
+   * next_page_token は次のページトークン
+   *
+   * @generated from field: string next_page_token = 2;
+   */
+  nextPageToken: string;
+};
+
+/**
+ * Describes the message gateway.v1.ListWorkspaceUsersResponse.
+ * Use `create(ListWorkspaceUsersResponseSchema)` to create a new message.
+ */
+export const ListWorkspaceUsersResponseSchema: GenMessage<ListWorkspaceUsersResponse> = /*@__PURE__*/
+  messageDesc(file_gateway_v1_me, 5);
+
+/**
  * Role はテナント内でのユーザーのロール
  *
  * @generated from enum gateway.v1.Role
@@ -171,6 +262,16 @@ export const MeService: GenService<{
     methodKind: "unary";
     input: typeof GetMeRequestSchema;
     output: typeof GetMeResponseSchema;
+  },
+  /**
+   * ListWorkspaceUsers はワークスペース内のユーザー一覧を取得する
+   *
+   * @generated from rpc gateway.v1.MeService.ListWorkspaceUsers
+   */
+  listWorkspaceUsers: {
+    methodKind: "unary";
+    input: typeof ListWorkspaceUsersRequestSchema;
+    output: typeof ListWorkspaceUsersResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_gateway_v1_me, 0);

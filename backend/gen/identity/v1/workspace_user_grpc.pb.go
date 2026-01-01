@@ -19,7 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	WorkspaceUserService_GetWorkspaceUser_FullMethodName = "/identity.v1.WorkspaceUserService/GetWorkspaceUser"
+	WorkspaceUserService_GetWorkspaceUser_FullMethodName   = "/identity.v1.WorkspaceUserService/GetWorkspaceUser"
+	WorkspaceUserService_ListWorkspaceUsers_FullMethodName = "/identity.v1.WorkspaceUserService/ListWorkspaceUsers"
 )
 
 // WorkspaceUserServiceClient is the client API for WorkspaceUserService service.
@@ -31,6 +32,8 @@ type WorkspaceUserServiceClient interface {
 	// GetWorkspaceUser は現在認証されているユーザーの Workspace User 情報を取得する
 	// X-Auth0-User-ID ヘッダーから Auth0 User ID を取得して、対応する Workspace User を返す
 	GetWorkspaceUser(ctx context.Context, in *GetWorkspaceUserRequest, opts ...grpc.CallOption) (*GetWorkspaceUserResponse, error)
+	// ListWorkspaceUsers はワークスペース内のユーザー一覧を取得する
+	ListWorkspaceUsers(ctx context.Context, in *ListWorkspaceUsersRequest, opts ...grpc.CallOption) (*ListWorkspaceUsersResponse, error)
 }
 
 type workspaceUserServiceClient struct {
@@ -51,6 +54,16 @@ func (c *workspaceUserServiceClient) GetWorkspaceUser(ctx context.Context, in *G
 	return out, nil
 }
 
+func (c *workspaceUserServiceClient) ListWorkspaceUsers(ctx context.Context, in *ListWorkspaceUsersRequest, opts ...grpc.CallOption) (*ListWorkspaceUsersResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListWorkspaceUsersResponse)
+	err := c.cc.Invoke(ctx, WorkspaceUserService_ListWorkspaceUsers_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // WorkspaceUserServiceServer is the server API for WorkspaceUserService service.
 // All implementations must embed UnimplementedWorkspaceUserServiceServer
 // for forward compatibility.
@@ -60,6 +73,8 @@ type WorkspaceUserServiceServer interface {
 	// GetWorkspaceUser は現在認証されているユーザーの Workspace User 情報を取得する
 	// X-Auth0-User-ID ヘッダーから Auth0 User ID を取得して、対応する Workspace User を返す
 	GetWorkspaceUser(context.Context, *GetWorkspaceUserRequest) (*GetWorkspaceUserResponse, error)
+	// ListWorkspaceUsers はワークスペース内のユーザー一覧を取得する
+	ListWorkspaceUsers(context.Context, *ListWorkspaceUsersRequest) (*ListWorkspaceUsersResponse, error)
 	mustEmbedUnimplementedWorkspaceUserServiceServer()
 }
 
@@ -72,6 +87,9 @@ type UnimplementedWorkspaceUserServiceServer struct{}
 
 func (UnimplementedWorkspaceUserServiceServer) GetWorkspaceUser(context.Context, *GetWorkspaceUserRequest) (*GetWorkspaceUserResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetWorkspaceUser not implemented")
+}
+func (UnimplementedWorkspaceUserServiceServer) ListWorkspaceUsers(context.Context, *ListWorkspaceUsersRequest) (*ListWorkspaceUsersResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListWorkspaceUsers not implemented")
 }
 func (UnimplementedWorkspaceUserServiceServer) mustEmbedUnimplementedWorkspaceUserServiceServer() {}
 func (UnimplementedWorkspaceUserServiceServer) testEmbeddedByValue()                              {}
@@ -112,6 +130,24 @@ func _WorkspaceUserService_GetWorkspaceUser_Handler(srv interface{}, ctx context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _WorkspaceUserService_ListWorkspaceUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListWorkspaceUsersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkspaceUserServiceServer).ListWorkspaceUsers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkspaceUserService_ListWorkspaceUsers_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkspaceUserServiceServer).ListWorkspaceUsers(ctx, req.(*ListWorkspaceUsersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // WorkspaceUserService_ServiceDesc is the grpc.ServiceDesc for WorkspaceUserService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -122,6 +158,10 @@ var WorkspaceUserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetWorkspaceUser",
 			Handler:    _WorkspaceUserService_GetWorkspaceUser_Handler,
+		},
+		{
+			MethodName: "ListWorkspaceUsers",
+			Handler:    _WorkspaceUserService_ListWorkspaceUsers_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

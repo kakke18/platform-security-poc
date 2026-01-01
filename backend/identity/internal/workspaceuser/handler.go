@@ -52,3 +52,47 @@ func (h *Handler) GetWorkspaceUser(
 		Name:            workspaceUser.Name,
 	}), nil
 }
+
+// ListWorkspaceUsers はワークスペース内のユーザー一覧を取得する
+func (h *Handler) ListWorkspaceUsers(
+	ctx context.Context,
+	req *connect.Request[identityv1.ListWorkspaceUsersRequest],
+) (*connect.Response[identityv1.ListWorkspaceUsersResponse], error) {
+	// ヘッダーからAuth0ユーザーIDを取得（Gatewayで検証済み）
+	auth0UserID := req.Header().Get("X-Auth0-User-ID")
+	if auth0UserID == "" {
+		return nil, connect.NewError(connect.CodeUnauthenticated, nil)
+	}
+
+	// 現在のユーザーのWorkspaceUserを取得してWorkspaceIDを取得
+	workspaceUser, err := h.workspaceUserRepo.FindByAuth0UserID(ctx, auth0UserID)
+	if err != nil {
+		return nil, connect.NewError(connect.CodeNotFound, err)
+	}
+
+	// ワークスペース内のユーザー一覧を取得
+	users, nextPageToken, err := h.workspaceUserRepo.ListByWorkspaceID(
+		ctx,
+		workspaceUser.WorkspaceID,
+		req.Msg.PageSize,
+		req.Msg.PageToken,
+	)
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInternal, err)
+	}
+
+	// レスポンスに変換
+	workspaceUsers := make([]*identityv1.WorkspaceUser, len(users))
+	for i, u := range users {
+		workspaceUsers[i] = &identityv1.WorkspaceUser{
+			WorkspaceUserId: u.ID,
+			Email:           u.Email,
+			Name:            u.Name,
+		}
+	}
+
+	return connect.NewResponse(&identityv1.ListWorkspaceUsersResponse{
+		Users:         workspaceUsers,
+		NextPageToken: nextPageToken,
+	}), nil
+}

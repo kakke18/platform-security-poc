@@ -35,6 +35,9 @@ const (
 const (
 	// MeServiceGetMeProcedure is the fully-qualified name of the MeService's GetMe RPC.
 	MeServiceGetMeProcedure = "/gateway.v1.MeService/GetMe"
+	// MeServiceListWorkspaceUsersProcedure is the fully-qualified name of the MeService's
+	// ListWorkspaceUsers RPC.
+	MeServiceListWorkspaceUsersProcedure = "/gateway.v1.MeService/ListWorkspaceUsers"
 )
 
 // MeServiceClient is a client for the gateway.v1.MeService service.
@@ -42,6 +45,8 @@ type MeServiceClient interface {
 	// GetMe は現在認証されているユーザーの全情報を取得する
 	// Identity API と User Service API を呼び出して統合したレスポンスを返す
 	GetMe(context.Context, *connect.Request[v1.GetMeRequest]) (*connect.Response[v1.GetMeResponse], error)
+	// ListWorkspaceUsers はワークスペース内のユーザー一覧を取得する
+	ListWorkspaceUsers(context.Context, *connect.Request[v1.ListWorkspaceUsersRequest]) (*connect.Response[v1.ListWorkspaceUsersResponse], error)
 }
 
 // NewMeServiceClient constructs a client for the gateway.v1.MeService service. By default, it uses
@@ -61,12 +66,19 @@ func NewMeServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...c
 			connect.WithSchema(meServiceMethods.ByName("GetMe")),
 			connect.WithClientOptions(opts...),
 		),
+		listWorkspaceUsers: connect.NewClient[v1.ListWorkspaceUsersRequest, v1.ListWorkspaceUsersResponse](
+			httpClient,
+			baseURL+MeServiceListWorkspaceUsersProcedure,
+			connect.WithSchema(meServiceMethods.ByName("ListWorkspaceUsers")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
 // meServiceClient implements MeServiceClient.
 type meServiceClient struct {
-	getMe *connect.Client[v1.GetMeRequest, v1.GetMeResponse]
+	getMe              *connect.Client[v1.GetMeRequest, v1.GetMeResponse]
+	listWorkspaceUsers *connect.Client[v1.ListWorkspaceUsersRequest, v1.ListWorkspaceUsersResponse]
 }
 
 // GetMe calls gateway.v1.MeService.GetMe.
@@ -74,11 +86,18 @@ func (c *meServiceClient) GetMe(ctx context.Context, req *connect.Request[v1.Get
 	return c.getMe.CallUnary(ctx, req)
 }
 
+// ListWorkspaceUsers calls gateway.v1.MeService.ListWorkspaceUsers.
+func (c *meServiceClient) ListWorkspaceUsers(ctx context.Context, req *connect.Request[v1.ListWorkspaceUsersRequest]) (*connect.Response[v1.ListWorkspaceUsersResponse], error) {
+	return c.listWorkspaceUsers.CallUnary(ctx, req)
+}
+
 // MeServiceHandler is an implementation of the gateway.v1.MeService service.
 type MeServiceHandler interface {
 	// GetMe は現在認証されているユーザーの全情報を取得する
 	// Identity API と User Service API を呼び出して統合したレスポンスを返す
 	GetMe(context.Context, *connect.Request[v1.GetMeRequest]) (*connect.Response[v1.GetMeResponse], error)
+	// ListWorkspaceUsers はワークスペース内のユーザー一覧を取得する
+	ListWorkspaceUsers(context.Context, *connect.Request[v1.ListWorkspaceUsersRequest]) (*connect.Response[v1.ListWorkspaceUsersResponse], error)
 }
 
 // NewMeServiceHandler builds an HTTP handler from the service implementation. It returns the path
@@ -94,10 +113,18 @@ func NewMeServiceHandler(svc MeServiceHandler, opts ...connect.HandlerOption) (s
 		connect.WithSchema(meServiceMethods.ByName("GetMe")),
 		connect.WithHandlerOptions(opts...),
 	)
+	meServiceListWorkspaceUsersHandler := connect.NewUnaryHandler(
+		MeServiceListWorkspaceUsersProcedure,
+		svc.ListWorkspaceUsers,
+		connect.WithSchema(meServiceMethods.ByName("ListWorkspaceUsers")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/gateway.v1.MeService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case MeServiceGetMeProcedure:
 			meServiceGetMeHandler.ServeHTTP(w, r)
+		case MeServiceListWorkspaceUsersProcedure:
+			meServiceListWorkspaceUsersHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -109,4 +136,8 @@ type UnimplementedMeServiceHandler struct{}
 
 func (UnimplementedMeServiceHandler) GetMe(context.Context, *connect.Request[v1.GetMeRequest]) (*connect.Response[v1.GetMeResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("gateway.v1.MeService.GetMe is not implemented"))
+}
+
+func (UnimplementedMeServiceHandler) ListWorkspaceUsers(context.Context, *connect.Request[v1.ListWorkspaceUsersRequest]) (*connect.Response[v1.ListWorkspaceUsersResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("gateway.v1.MeService.ListWorkspaceUsers is not implemented"))
 }

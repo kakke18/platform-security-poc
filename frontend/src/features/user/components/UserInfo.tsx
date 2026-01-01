@@ -58,6 +58,7 @@ export function UserInfo({ user, accessToken }: UserInfoProps) {
           <h3 className="text-lg font-semibold text-gray-900">Access Token</h3>
           {accessToken && (
             <button
+              type="button"
               onClick={handleCopyToken}
               className="bg-blue-500 text-white py-1 px-3 rounded-md hover:bg-blue-600 text-sm"
             >
@@ -73,7 +74,10 @@ export function UserInfo({ user, accessToken }: UserInfoProps) {
           <p className="text-red-600 text-sm">No access token available</p>
         )}
         <p className="text-xs text-gray-600 mt-2">
-          Use this token with: <code className="bg-gray-200 px-1 rounded">AUTH0_TOKEN=&quot;...&quot; ./scripts/test-gateway.sh</code>
+          Use this token with:{' '}
+          <code className="bg-gray-200 px-1 rounded">
+            AUTH0_TOKEN=&quot;...&quot; ./scripts/test-gateway.sh
+          </code>
         </p>
       </div>
 

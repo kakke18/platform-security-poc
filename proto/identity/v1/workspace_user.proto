@@ -9,6 +9,9 @@ service WorkspaceUserService {
   // GetWorkspaceUser は現在認証されているユーザーの Workspace User 情報を取得する
   // X-Auth0-User-ID ヘッダーから Auth0 User ID を取得して、対応する Workspace User を返す
   rpc GetWorkspaceUser(GetWorkspaceUserRequest) returns (GetWorkspaceUserResponse);
+
+  // ListWorkspaceUsers はワークスペース内のユーザー一覧を取得する
+  rpc ListWorkspaceUsers(ListWorkspaceUsersRequest) returns (ListWorkspaceUsersResponse);
 }
 
 // GetWorkspaceUserRequest は GetWorkspaceUser のリクエスト
@@ -29,4 +32,34 @@ message GetWorkspaceUserResponse {
 
   // name は表示名
   string name = 4;
+}
+
+// ListWorkspaceUsersRequest は ListWorkspaceUsers のリクエスト
+message ListWorkspaceUsersRequest {
+  // page_size はページサイズ
+  int32 page_size = 1;
+
+  // page_token はページトークン
+  string page_token = 2;
+}
+
+// WorkspaceUser はワークスペースユーザー情報
+message WorkspaceUser {
+  // workspace_user_id はワークスペースユーザーID
+  string workspace_user_id = 1;
+
+  // email はメールアドレス
+  string email = 2;
+
+  // name は表示名
+  string name = 3;
+}
+
+// ListWorkspaceUsersResponse は ListWorkspaceUsers のレスポンス
+message ListWorkspaceUsersResponse {
+  // users はユーザー情報のリスト
+  repeated WorkspaceUser users = 1;
+
+  // next_page_token は次のページトークン
+  string next_page_token = 2;
 }
