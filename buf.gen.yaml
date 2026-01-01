@@ -11,6 +11,11 @@ plugins:
     out: backend/gen
     opt:
       - paths=source_relative
+  # gRPC Go code for backend-to-backend communication
+  - remote: buf.build/grpc/go
+    out: backend/gen
+    opt:
+      - paths=source_relative
 
   # Frontend TypeScript
   - remote: buf.build/bufbuild/es
