@@ -1,6 +1,7 @@
+import { Layout } from '~/components/Layout';
+import { PageHeader } from '~/components/PageHeader';
 import { useAuth } from '~/features/auth';
 import { UserInfo, useUser } from '~/features/user';
-import { Layout } from '~/components/Layout';
 
 export function MePage() {
   const { user: auth0User, loading: authLoading } = useAuth();
@@ -20,10 +21,10 @@ export function MePage() {
 
   return (
     <Layout>
-      <div className="max-w-4xl">
-        <div className="bg-white rounded-lg shadow-md p-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-6">My Profile</h1>
+      <PageHeader title="My Profile" />
 
+      <div className="max-w-4xl px-8">
+        <div className="bg-white rounded-lg shadow-md p-8">
           <div className="space-y-6">
             {userLoading && (
               <div className="bg-blue-50 border-l-4 border-blue-400 p-4">
